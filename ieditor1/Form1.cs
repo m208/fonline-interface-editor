@@ -115,7 +115,7 @@ namespace ieditor1
             }
             catch
             {
-                img = new Bitmap(@"C:/inv/nofile1.png");
+                img = new Bitmap(@"C:/inv/nofile1.png");        // !!! move it
                 pSize = cSize;
                 imgExist = false;
             }
