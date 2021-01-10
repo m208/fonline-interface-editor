@@ -8,11 +8,11 @@ using Newtonsoft.Json.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 
-namespace ieditor1
+namespace FOIE
 {
     class Editor
     {
-   
+
         static public Dictionary<string, string> controlTypesResources = new Dictionary<string, string>
         {
             ["area"] = "icon_hatch",
@@ -20,14 +20,14 @@ namespace ieditor1
             ["custom"] = "typography",
             ["error"] = "icon_error",
         };
-        
+
         static public string fullPath = "";
         static public string iniPath = "";
         static public string currentBackground = "";
 
         static public Dictionary<string, string> iniArray = new Dictionary<string, string>();
         static public int lineCounter = 0;
-        static public int mainImageWidth, mainImageHeight;
+        static public int mainImageWidth = 0, mainImageHeight = 0;
 
         //---------------------------------------------------------------------------------
         static public void iniRead(string path)
@@ -57,7 +57,7 @@ namespace ieditor1
                     //MessageBox.Show(key+val);
                 }
             }
-            
+
         }
         //---------------------------------------------------------------------------------
         static public int[] stringToRectArray(string str)
@@ -70,14 +70,14 @@ namespace ieditor1
             {
                 return null;
             }
-            
+
         }
         //---------------------------------------------------------------------------------
         static public int[] stringToRectSize(string str)
         {
             int[] a = str.Split(' ').Where(x => !string.IsNullOrWhiteSpace(x)).Select(x => int.Parse(x)).ToArray();
-            
-            int[] ret = { a[2]-a[0], a[3]-a[1] };
+
+            int[] ret = { a[2] - a[0], a[3] - a[1] };
 
             return ret;
         }
@@ -92,7 +92,7 @@ namespace ieditor1
             string jsonPath = System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             try
             {
-                string jsonString = System.IO.File.ReadAllText(@jsonPath+"\\config.json");
+                string jsonString = System.IO.File.ReadAllText(@jsonPath + "\\config.json");
                 json = JObject.Parse(jsonString);
                 jsonKeys.Clear();
                 foreach (JProperty property in json.Properties())
@@ -103,7 +103,7 @@ namespace ieditor1
             }
             catch
             {
-                return false;    
+                return false;
             }
 
         }
@@ -111,7 +111,7 @@ namespace ieditor1
         static public string getSizeFromStringCoords(string str)
         {
             int[] coords = stringToRectArray(str);
-            string ret = (coords[2] - coords[0]) + "x" + (coords[3] - coords[1]);
+            string ret = coords[2] - coords[0] + "x" + (coords[3] - coords[1]);
             return ret;
         }
 
@@ -128,22 +128,22 @@ namespace ieditor1
 
         public tableRowTag()              //Cunstractor
         {
-            this.TagDictionary = new Dictionary<string, object>();
+            TagDictionary = new Dictionary<string, object>();
         }
 
         public void Set(string key, object value)
         {
-            this.TagDictionary[key] = value;
+            TagDictionary[key] = value;
         }
 
         public object Get(string key)
         {
             if (TagDictionary.ContainsKey(key))
             {
-                return this.TagDictionary[key];
+                return TagDictionary[key];
             }
             else return "empty";
-            
+
         }
     }
 

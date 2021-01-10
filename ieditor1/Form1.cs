@@ -6,7 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using System.IO;
 using Newtonsoft.Json.Linq;
-
+using FOIE;
 
 namespace ieditor1
 {
@@ -104,7 +104,7 @@ namespace ieditor1
             }
             catch
             {
-                img = new Bitmap(ieditor1.Properties.Resources.nofile1);
+                img = new Bitmap(FOIE.Properties.Resources.nofile1);
                 pSize = cSize;
                 imgExist = false;
             }
@@ -157,7 +157,7 @@ namespace ieditor1
                 cSize = new Size(coords[2] - coords[0], coords[3] - coords[1]);
             }
 
-            Bitmap img = new Bitmap(ieditor1.Properties.Resources.hatch);
+            Bitmap img = new Bitmap(FOIE.Properties.Resources.hatch);
 
             var picture = new PictureBox
             {
@@ -276,7 +276,7 @@ namespace ieditor1
                 }
                 catch
                 {
-                    img = new Bitmap(ieditor1.Properties.Resources.nofile1);
+                    img = new Bitmap(FOIE.Properties.Resources.nofile1);
                     picSize = "error";
                     picExist = false;
                 }
@@ -397,7 +397,7 @@ namespace ieditor1
                 };
 
             string imgSrc = (controlSuccess) ? Editor.controlTypesResources[controlType] : Editor.controlTypesResources["error"];
-            object img = Properties.Resources.ResourceManager.GetObject(imgSrc);
+            object img = FOIE.Properties.Resources.ResourceManager.GetObject(imgSrc);
 
             var pb = new PictureBox
                 {
@@ -445,7 +445,7 @@ namespace ieditor1
                     Name = "hide" + name,
                     Size = new Size(20, 20),
                     Location = new Point(150, 0),
-                    BackgroundImage = (Image)(ieditor1.Properties.Resources.eye),
+                    BackgroundImage = (Image)(FOIE.Properties.Resources.eye),
                     BackgroundImageLayout = ImageLayout.Zoom,
                     Tag = "Show",
                 };
@@ -458,7 +458,7 @@ namespace ieditor1
                     Name = "zBttn" + name,
                     Size = new Size(20, 20),
                     Location = new Point(125, 0),
-                    BackgroundImage = (Image)(ieditor1.Properties.Resources.resize),
+                    BackgroundImage = (Image)(FOIE.Properties.Resources.resize),
                     BackgroundImageLayout = ImageLayout.Zoom,
                     Tag = "Up",
                 };
@@ -493,7 +493,7 @@ namespace ieditor1
                     Name = "open" + name,
                     Size = new Size(20, 20),
                     Location = new Point(370, 0),
-                    BackgroundImage = (Image)(ieditor1.Properties.Resources.folder1),
+                    BackgroundImage = (Image)(FOIE.Properties.Resources.folder1),
                     BackgroundImageLayout = ImageLayout.Zoom,
                 };
 
@@ -555,13 +555,13 @@ namespace ieditor1
 
             if (((Control)sender).Tag.Equals("Show"))
             {
-                ((Control)sender).BackgroundImage = (Image)(ieditor1.Properties.Resources.hide3);
+                ((Control)sender).BackgroundImage = (Image)(FOIE.Properties.Resources.hide3);
                 ((Control)sender).Tag = "Hide";
                 p.Visible = false;
             }
             else if (((Control)sender).Tag.Equals("Hide"))
             {
-                ((Control)sender).BackgroundImage = (Image)(ieditor1.Properties.Resources.eye);
+                ((Control)sender).BackgroundImage = (Image)(FOIE.Properties.Resources.eye);
                 ((Control)sender).Tag = "Show";
                 p.Visible = true;
                // p.BringToFront();
@@ -730,7 +730,7 @@ namespace ieditor1
                 Editor.iniPath = newIni;
 
                 Editor.iniRead(newIni);
-                drawDefault(Editor.jsonKeys[0]);    //drawDefault("Inventory");
+                drawDefault(Editor.jsonKeys[0]);//drawDefault("Inventory");
 
 
                 this.Text = newIni;
@@ -905,7 +905,7 @@ namespace ieditor1
             string controlType = (string)(pb.Tag);
 
             string imgSrc = (success) ? Editor.controlTypesResources[controlType] : Editor.controlTypesResources["error"];
-            object img = Properties.Resources.ResourceManager.GetObject(imgSrc);
+            object img = FOIE.Properties.Resources.ResourceManager.GetObject(imgSrc);
 
             pb.Image = (Image)img;
         }
@@ -934,7 +934,7 @@ namespace ieditor1
             {              
             }
 
-            object imgOk = Properties.Resources.ResourceManager.GetObject(imgSrc);
+            object imgOk = FOIE.Properties.Resources.ResourceManager.GetObject(imgSrc);
             pb.Image = (Image)imgOk;
             stb.Text = newSize;
         }
