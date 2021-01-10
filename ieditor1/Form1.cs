@@ -19,6 +19,7 @@ namespace ieditor1
         private void Form1_Load(object sender, EventArgs e)
         {
             bool configRead = Editor.GetJson();
+            Editor.getHints();
 
             if (configRead)
             {
@@ -399,6 +400,16 @@ namespace ieditor1
                     Text = name,
                 };
 
+            // tool tips from dictionary
+            string hint = "";
+            if (Editor.hintBook.ContainsKey(name))
+            {
+                hint = Editor.hintBook[name];
+            }
+            new ToolTip().SetToolTip(llbl, hint);
+            new ToolTip().SetToolTip(lbl, hint);
+
+
             string imgSrc = (controlSuccess) ? Editor.controlTypesResources[controlType] : Editor.controlTypesResources["error"];
             object img = FOIE.Properties.Resources.ResourceManager.GetObject(imgSrc);
 
@@ -733,7 +744,7 @@ namespace ieditor1
                 Editor.iniPath = newIni;
 
                 Editor.iniRead(newIni);
-                drawDefault(Editor.jsonKeys[0]);//drawDefault("Inventory");
+                drawDefault(Editor.jsonKeys[0]);
 
 
                 this.Text = newIni;

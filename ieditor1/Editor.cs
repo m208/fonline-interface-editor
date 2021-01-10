@@ -29,13 +29,14 @@ namespace FOIE
         static public int lineCounter = 0;
         static public int mainImageWidth = 0, mainImageHeight = 0;
 
+        static public Dictionary<string, string> hintBook = new Dictionary<string, string>();
         //---------------------------------------------------------------------------------
-        
-        
+
+
         //static public void 
-        
-        
-        
+
+
+
         static public void iniRead(string path)
         {
             iniArray.Clear();
@@ -70,7 +71,7 @@ namespace FOIE
             //      RESOLUTION BLOCKS
 
             int resBX = 0, resBY = 0;
-            int linec = 0;
+            
 
             foreach (string line in lines.Reverse()) 
             {
@@ -200,6 +201,38 @@ namespace FOIE
             }
 
         }
+
+        //-------------------------------------------------------------------------------
+        static public void getHints()
+        {
+            hintBook.Clear();
+
+            string path = System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            string[] lines = System.IO.File.ReadAllLines(@path + "\\hintbook.ini");
+
+            foreach (string line in lines)
+            {
+                string l = line.Trim();
+                int indexOfCharEquals = l.IndexOf('=');
+                int indexOfCharSharp = l.IndexOf('#');
+
+                if (indexOfCharEquals > 0 && indexOfCharSharp != 0)
+                {
+                    string key = l.Substring(0, indexOfCharEquals);
+                    key = key.Trim();
+                    string val = l.Substring(indexOfCharSharp + 1);
+                    val = val.Trim();
+                    hintBook[key] = val;
+                    //MessageBox.Show(key+" "+val);
+                }
+
+            }
+
+        }
+
+
+
+        //-------------------------------------------------------------------------------
 
         static public string getSizeFromStringCoords(string str)
         {
