@@ -12,8 +12,7 @@ namespace ieditor1
 {
     class Editor
     {
-
-        
+   
         static public Dictionary<string, string> controlTypesResources = new Dictionary<string, string>
         {
             ["area"] = "icon_hatch",
@@ -22,7 +21,6 @@ namespace ieditor1
             ["error"] = "icon_error",
         };
         
-
         static public string fullPath = "";
         static public string iniPath = "";
         static public string currentBackground = "";
@@ -31,50 +29,10 @@ namespace ieditor1
         static public int lineCounter = 0;
         static public int mainImageWidth, mainImageHeight;
 
-
-        //---------------------------------------------------------------------------------
-        //  INVENTORY
-        static public string GuiInventoryImgMain = "InvMain";
-        static public string[] GuiInventoryControls = {
-            "InvSlot1",
-            "InvSlot2",
-            "InvArmor",
-            "InvText",
-            "InvChosen",
-            "InvInv",
-        };
-        static public string[] GuiInventoryButtons =
-        {
-             "InvOk",
-            "InvScrDn",
-            "InvScrUp"
-
-        };
-        //---------------------------------------------------------------------------------
-        //  FIXBOY
-        static public string GuiFixBoyImgMain = "FixMain";
-        static public string[] GuiFixBoyControls = {
-            "FixScrUp",
-            "FixScrDn",
-            "FixFix",
-            "FixDone",
-            "FixWin",
-            "FixNum",
-            "FixUp",
-            "FixDow",
-            "FixButton1",
-            "FixButton2",
-            "FixButton3",
-            "FixButton4",
-            "FixButton5",
-        };
-
-
         //---------------------------------------------------------------------------------
         static public void iniRead(string path)
         {
             iniArray.Clear();
-
             //string path = fullPath + "default.ini";
             string[] lines = System.IO.File.ReadAllLines(@path);
             foreach (string line in lines.Reverse())
@@ -161,14 +119,7 @@ namespace ieditor1
         {
             return (a & 1) == 0;
         }
-
-
-
-
     }
-
-
-
 
 
     public class tableRowTag
@@ -195,14 +146,6 @@ namespace ieditor1
             
         }
     }
-
-
-
-
-
-
-
-
 
 
 }

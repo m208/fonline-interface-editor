@@ -49,8 +49,6 @@ namespace ieditor1
             control.MouseDown += (sender, e) => StartMovingOrResizing(control, e, txtPair);
             control.MouseUp += (sender, e) => StopDragOrResizing(control, txtPair);
             control.MouseMove += (sender, e) => MoveControl(container, e);
-
-            //refreshText(control, txtPair);
         }
 
         private static void UpdateMouseEdgeProperties(Control control, Point mouseLocationInControl)
@@ -130,11 +128,6 @@ namespace ieditor1
             }
             _cursorStartPoint = new Point(e.X, e.Y);
             control.Capture = true;
-
-
-
-
-
         }
 
         private static void MoveControl(Control control, MouseEventArgs e)
@@ -200,9 +193,6 @@ namespace ieditor1
                     StopDragOrResizing(control, control);
                 }
 
-              
-
-
                 //-------------------------------------------------------------------
             }
             else if (_moving)
@@ -255,21 +245,12 @@ namespace ieditor1
 
         //-------------------------------------------------------------------
 
-
         private static void StopDragOrResizing(Control control, Control txtPair)
         {
             _resizing = false;
             _moving = false;
             control.Capture = false;
             UpdateMouseCursor(control);
-
-           // refreshText(control, txtPair);
-
-
-            //  Form1 b = new Form1();
-            // b.cb(control, "11123");
-            //Call_UpdateBox(Form1);
-            // Form1.msBox(control, "hello");
         }
 
         #region Save And Load

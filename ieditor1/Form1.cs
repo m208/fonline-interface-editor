@@ -10,14 +10,11 @@ using Newtonsoft.Json.Linq;
 
 namespace ieditor1
 {
-
-
     public partial class Form1 : Form
     {
         public Form1()
         {
             InitializeComponent();
-
         }
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -32,8 +29,6 @@ namespace ieditor1
                 MessageBox.Show("Error reading config.json");
                 this.Close();
             }
-
-            //Editor.GetJson();
 
         }
 
@@ -58,26 +53,21 @@ namespace ieditor1
             
         }
 
-        private void openDefault()
-        {
-            Editor.fullPath = "F:\\FOnline2S3en\\data\\art\\intrface\\";
-            Editor.iniRead(Editor.fullPath + "default.ini");
-            drawDefault("Inventory");
-            Editor.iniPath = Editor.fullPath + "default.ini";
-            this.Text = Editor.fullPath;
-        }
+        //private void openDefault()
+        //{
+        //    Editor.fullPath = "F:\\FOnline2S3en\\data\\art\\intrface\\";
+        //    Editor.iniRead(Editor.fullPath + "default.ini");
+        //    drawDefault("Inventory");
+        //    Editor.iniPath = Editor.fullPath + "default.ini";
+        //    this.Text = Editor.fullPath;
+        //}
 
 
         //System.Media.SystemSounds.Beep.Play();
 
 
+        //  --------------  ADD MAIN PIC    --------------
 
-
-
-        //      ADD MAIN PIC
-
-
-        //-----------------------------------------------------------------
         private void addMainPic(string name, string bgImage)
         {
             string areaValue = "0 0 0 0";
@@ -106,7 +96,6 @@ namespace ieditor1
                 cSize = new Size(coords[2] - coords[0], coords[3] - coords[1]);
             }
 
-
             bool imgExist = true;
             try
             {
@@ -115,7 +104,7 @@ namespace ieditor1
             }
             catch
             {
-                img = new Bitmap(@"C:/inv/nofile1.png");        // !!! move it
+                img = new Bitmap(ieditor1.Properties.Resources.nofile1);
                 pSize = cSize;
                 imgExist = false;
             }
@@ -150,7 +139,7 @@ namespace ieditor1
 
         }
 
-        //      ADD CONTROL NO PICTURE
+        //  --------------  ADD CONTROL NO PICTURE  --------------
 
         private void addGameControl(string name)
         {
@@ -204,7 +193,7 @@ namespace ieditor1
         }
 
 
-        //ADD only text field
+        //  --------------    ADD only text field   --------------
 
         private void addCustomField(string name)
         {
@@ -217,15 +206,9 @@ namespace ieditor1
 
         }
 
-
-
-        //------------------------------------------------------------------------------------------------
-
-        //      ADD addBttnControl
+        //  --------------    ADD addBttnControl    --------------
         private void addBttnControl(string[] line)
         {
-            //
-
             string areaValue = "0 0 0 0";
             if (Editor.iniArray.ContainsKey(line[0]))
             {
@@ -299,7 +282,7 @@ namespace ieditor1
                 }
                 addTxtControlsLine(line[0], line[i], false, false, value, picSize, true, "picture", picExist);
             }
-            //---------------------------------------------------------------------
+            
         }
         //------------------------------------------------------------------------------------------------
 
@@ -324,7 +307,6 @@ namespace ieditor1
         }
 
         //------------------------------------------------------------------------------------------------
-
 
 
         private void picBoxClickHighlight(object sender, EventArgs e)
@@ -376,8 +358,6 @@ namespace ieditor1
             //Update Array data
             Editor.iniArray[itemName] = newValue;
         }
-
-
 
 
         //---------------------------------------------------------------------------------------------------------
@@ -452,10 +432,7 @@ namespace ieditor1
 
             
             Panel p = panel2.Controls.Find("panel"+ name, true).FirstOrDefault() as Panel;
-            
-           
 
-           
             p.Controls.Add(tb1);
             p.Controls.Add(tb2);
             p.Controls.Add(pb);
@@ -490,7 +467,6 @@ namespace ieditor1
                 p.Controls.Add(zBttn);
 
             }
-
 
 
             if (controlType == "picture")
@@ -618,9 +594,6 @@ namespace ieditor1
                 setImage(currentGroup, currentItem.Substring("cb".Length)); // substring = crop "cb"
         }
 
-
-
-
         //------------------------------------------------------
 
         private void changeImg(object sender, EventArgs e)
@@ -656,7 +629,6 @@ namespace ieditor1
                 else
                 {
 
-
                     readImageStats(currentItem);
 
                     if (cb.Checked)
@@ -665,10 +637,6 @@ namespace ieditor1
                         setImage(currentGroup, currentItem);
                     }
                 }
-
-
-
-
                 
             }
         }
@@ -680,8 +648,6 @@ namespace ieditor1
             saveFileDialog1.InitialDirectory = Editor.fullPath;
             saveFileDialog1.Filter = "Ini file|*.ini";
             string saveTo;
-
-
 
             if (saveFileDialog1.ShowDialog() == DialogResult.Cancel)
             {
@@ -755,6 +721,7 @@ namespace ieditor1
 
         private void openProject()
         {
+
             string newIni = getFileName("Ini file|*.ini", false);
             if (newIni != null)
             {
@@ -763,7 +730,8 @@ namespace ieditor1
                 Editor.iniPath = newIni;
 
                 Editor.iniRead(newIni);
-                drawDefault("Inventory");
+                drawDefault(Editor.jsonKeys[0]);    //drawDefault("Inventory");
+
 
                 this.Text = newIni;
             }
@@ -837,11 +805,9 @@ namespace ieditor1
                         addCustomField(name);
                 }
 
-
                 colorizeRows();
                 setPicsforControls();
                 this.panel2.Visible = true;
-
 
         }
 
@@ -1047,12 +1013,6 @@ namespace ieditor1
             panel2.HorizontalScroll.Enabled = false;
             panel2.AutoScroll = true;
         }
-
-
-
-
-
-
 
 
 

@@ -8,9 +8,8 @@ namespace ieditor1
 {
     static class Program
     {
-        /// <summary>
-        /// Главная точка входа для приложения.
-        /// </summary>
+        /// App entry point
+
         [STAThread]
         static void Main()
         {
