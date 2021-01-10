@@ -138,9 +138,9 @@ namespace FOIE
                         //MessageBox.Show(key+val);
                     }
 
-                    if (lines[i + 1].Contains("resolution"))
+                    if (i+1<lines.Length && lines[i + 1].Contains("resolution"))
                      {
-                    i = lines.Length;
+                        i = lines.Length;
                      }
 
 

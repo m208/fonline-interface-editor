@@ -96,17 +96,16 @@
             this.screenToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
             this.screenToolStripMenuItem.Text = "Screen";
             // 
-            // openFileDialog1
-            // 
-            this.openFileDialog1.FileName = "";
-            // 
             // panel1
             // 
+            this.panel1.AutoScroll = true;
             this.panel1.AutoSize = true;
+            this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panel1.BackColor = System.Drawing.Color.LightCyan;
-            this.panel1.Location = new System.Drawing.Point(25, 25);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panel1.Location = new System.Drawing.Point(0, 24);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1, 1);
+            this.panel1.Size = new System.Drawing.Size(0, 426);
             this.panel1.TabIndex = 8;
             // 
             // panel2
