@@ -30,11 +30,18 @@ namespace FOIE
         static public int mainImageWidth = 0, mainImageHeight = 0;
 
         //---------------------------------------------------------------------------------
+        
+        
+        //static public void 
+        
+        
+        
         static public void iniRead(string path)
         {
             iniArray.Clear();
             //string path = fullPath + "default.ini";
             string[] lines = System.IO.File.ReadAllLines(@path);
+           
             foreach (string line in lines.Reverse())
             //foreach (string line in lines)
             {
@@ -43,6 +50,7 @@ namespace FOIE
                 string l = line.Trim();
                 int indexOfCharEquals = l.IndexOf('=');
                 int indexOfCharSharp = l.IndexOf('#');
+
                 if (indexOfCharEquals > 0 && indexOfCharSharp != 0)
                 {
                     key = l.Substring(0, indexOfCharEquals);
@@ -56,9 +64,94 @@ namespace FOIE
                     iniArray[key] = val;
                     //MessageBox.Show(key+val);
                 }
+                
+            }
+
+            //      RESOLUTION BLOCKS
+
+            int resBX = 0, resBY = 0;
+            int linec = 0;
+
+            foreach (string line in lines.Reverse()) 
+            {
+                string l = line.Trim();
+                int indexOfCharSharp = l.IndexOf('#');
+                bool resBlockHeader = l.Contains("resolution");
+
+                if (indexOfCharSharp != 0 && resBlockHeader) {
+
+                   string[] subs = l.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                    int x = Int32.Parse(subs[1]);
+                    if (x > resBX) { resBX = x; }
+
+                    int y = Int32.Parse(subs[2]);
+                    if (y > resBY) { resBY = y; }
+                }
+            }
+            
+            if (resBX > 0 || resBY > 0)
+            {
+                foreach (string line in lines.Reverse())
+                {
+                    string l = line.Trim();
+
+                    if (l.IndexOf('#') != 0)
+                    {
+                        if ((l.Contains("resolution") && l.Contains(resBX.ToString()) && l.Contains(resBY.ToString())) || (l.Contains("resolution") && l.Contains(resBX.ToString())))
+                        {
+                            // MessageBox.Show(line + " 1");
+
+                            int index = Array.IndexOf(lines, line);
+                            readResolutionBlock(lines, index+1);
+                        }
+                    }
+                }
+            }
+
+            //MessageBox.Show(resBX.ToString()+ resBY.ToString());
+
+            //      END RES BLOCKS
+        }
+
+        static public void readResolutionBlock(string[] lines, int index)
+        {
+            for (int i = index; i < lines.Length; i++)
+                {
+                    string key = "";
+                    string val = "";
+                    string l = lines[i].Trim();
+                    int indexOfCharEquals = l.IndexOf('=');
+                    int indexOfCharSharp = l.IndexOf('#');
+
+                    if (indexOfCharEquals > 0 && indexOfCharSharp != 0)
+                    {
+                        key = l.Substring(0, indexOfCharEquals);
+                        key = key.Trim();
+                        val = l.Substring(indexOfCharEquals + 1);
+                        if (val.IndexOf('#') > 0)
+                        {
+                            val = val.Substring(0, val.IndexOf('#'));
+                        }
+                        val = val.Trim();
+                        iniArray[key] = val;
+                        //MessageBox.Show(key+val);
+                    }
+
+                    if (lines[i + 1].Contains("resolution"))
+                     {
+                    i = lines.Length;
+                     }
+
+
+               // }
             }
 
         }
+
+
+
+
         //---------------------------------------------------------------------------------
         static public int[] stringToRectArray(string str)
         {

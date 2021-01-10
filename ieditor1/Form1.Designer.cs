@@ -98,7 +98,7 @@
             // 
             // openFileDialog1
             // 
-            this.openFileDialog1.FileName = "openFileDialog1";
+            this.openFileDialog1.FileName = "";
             // 
             // panel1
             // 
@@ -173,7 +173,7 @@
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.menuStrip0);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "FOnline Interface Editor";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip0.ResumeLayout(false);
             this.menuStrip0.PerformLayout();
