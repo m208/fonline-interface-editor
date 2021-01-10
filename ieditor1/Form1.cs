@@ -137,6 +137,9 @@ namespace ieditor1
             picture.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
             panel1.Controls.Add(picture);
 
+         
+
+            //MessageBox.Show(panel1.Width.ToString());
         }
 
         //  --------------  ADD CONTROL NO PICTURE  --------------

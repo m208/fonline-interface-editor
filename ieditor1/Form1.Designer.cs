@@ -46,7 +46,9 @@
             this.toolSt2222 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripScreen = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip0 = new System.Windows.Forms.MenuStrip();
+            this.panel3 = new System.Windows.Forms.Panel();
             this.menuStrip0.SuspendLayout();
+            this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // fileToolStripMenuItem
@@ -98,14 +100,12 @@
             // 
             // panel1
             // 
-            this.panel1.AutoScroll = true;
             this.panel1.AutoSize = true;
             this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panel1.BackColor = System.Drawing.Color.LightCyan;
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panel1.Location = new System.Drawing.Point(0, 24);
+            this.panel1.Location = new System.Drawing.Point(3, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(0, 426);
+            this.panel1.Size = new System.Drawing.Size(0, 0);
             this.panel1.TabIndex = 8;
             // 
             // panel2
@@ -163,19 +163,35 @@
             this.menuStrip0.TabIndex = 10;
             this.menuStrip0.Text = "menuStrip1";
             // 
+            // panel3
+            // 
+            this.panel3.AutoScroll = true;
+            this.panel3.AutoSize = true;
+            this.panel3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panel3.Controls.Add(this.panel1);
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panel3.Location = new System.Drawing.Point(0, 24);
+            this.panel3.MaximumSize = new System.Drawing.Size(1450, 0);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(6, 426);
+            this.panel3.TabIndex = 11;
+            this.panel3.Tag = "MainPic Placeholder";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1057, 450);
+            this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
-            this.Controls.Add(this.panel1);
             this.Controls.Add(this.menuStrip0);
             this.Name = "Form1";
             this.Text = "FOnline Interface Editor";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip0.ResumeLayout(false);
             this.menuStrip0.PerformLayout();
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -200,6 +216,7 @@
         private System.Windows.Forms.ToolStripMenuItem toolSt2222;
         private System.Windows.Forms.ToolStripMenuItem toolStripScreen;
         private System.Windows.Forms.MenuStrip menuStrip0;
+        private System.Windows.Forms.Panel panel3;
     }
 }
 
