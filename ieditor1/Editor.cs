@@ -31,16 +31,9 @@ namespace FOIE
 
         static public Dictionary<string, string> hintBook = new Dictionary<string, string>();
         //---------------------------------------------------------------------------------
-
-
-        //static public void 
-
-
-
         static public void iniRead(string path)
         {
             iniArray.Clear();
-            //string path = fullPath + "default.ini";
             string[] lines = System.IO.File.ReadAllLines(@path);
            
             foreach (string line in lines.Reverse())
@@ -117,37 +110,36 @@ namespace FOIE
 
         static public void readResolutionBlock(string[] lines, int index)
         {
-            for (int i = index; i < lines.Length; i++)
+            bool breakvar = false;
+            for (int i = index; !breakvar; i++) 
+            {
+                string l = lines[i].Trim();
+                int indexOfCharEquals = l.IndexOf('=');
+                int indexOfCharSharp = l.IndexOf('#');
+
+                if (indexOfCharEquals > 0 && indexOfCharSharp != 0)
                 {
-                    string key = "";
-                    string val = "";
-                    string l = lines[i].Trim();
-                    int indexOfCharEquals = l.IndexOf('=');
-                    int indexOfCharSharp = l.IndexOf('#');
-
-                    if (indexOfCharEquals > 0 && indexOfCharSharp != 0)
+                    string key = l.Substring(0, indexOfCharEquals);
+                    key = key.Trim();
+                    string val = l.Substring(indexOfCharEquals + 1);
+                    if (val.IndexOf('#') > 0)
                     {
-                        key = l.Substring(0, indexOfCharEquals);
-                        key = key.Trim();
-                        val = l.Substring(indexOfCharEquals + 1);
-                        if (val.IndexOf('#') > 0)
-                        {
-                            val = val.Substring(0, val.IndexOf('#'));
-                        }
-                        val = val.Trim();
-                        iniArray[key] = val;
-                        //MessageBox.Show(key+val);
+                        val = val.Substring(0, val.IndexOf('#'));
                     }
+                    val = val.Trim();
+                    iniArray[key] = val;
+                    //MessageBox.Show(key+val);
+                }
 
-                    if (i+1<lines.Length && lines[i + 1].Contains("resolution"))
-                     {
-                        i = lines.Length;
-                     }
-
-
-               // }
+                if (i+1 == lines.Length)
+                {
+                    breakvar = true;
+                } 
+                else if (i+1<lines.Length && lines[i + 1].Contains("resolution"))
+                {
+                    breakvar = true;
+                }
             }
-
         }
 
 
