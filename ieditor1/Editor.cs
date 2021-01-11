@@ -15,9 +15,9 @@ namespace FOIE
 
         static public Dictionary<string, string> controlTypesResources = new Dictionary<string, string>
         {
-            ["area"] = "icon_hatch",
-            ["picture"] = "icon_image",
-            ["custom"] = "typography",
+            ["Area"] = "icon_hatch",
+            ["Picture"] = "icon_image",
+            ["Custom"] = "typography",
             ["error"] = "icon_error",
         };
 
@@ -30,7 +30,10 @@ namespace FOIE
         static public int mainImageWidth = 0, mainImageHeight = 0;
 
         static public Dictionary<string, string> hintBook = new Dictionary<string, string>();
-        //---------------------------------------------------------------------------------
+
+
+        //  --------------  INI READING     -----------------------
+
         static public void iniRead(string path)
         {
             iniArray.Clear();
@@ -64,7 +67,6 @@ namespace FOIE
             //      RESOLUTION BLOCKS
 
             int resBX = 0, resBY = 0;
-            
 
             foreach (string line in lines.Reverse()) 
             {
@@ -94,16 +96,12 @@ namespace FOIE
                     {
                         if ((l.Contains("resolution") && l.Contains(resBX.ToString()) && l.Contains(resBY.ToString())) || (l.Contains("resolution") && l.Contains(resBX.ToString())))
                         {
-                            // MessageBox.Show(line + " 1");
-
                             int index = Array.IndexOf(lines, line);
                             readResolutionBlock(lines, index+1);
                         }
                     }
                 }
             }
-
-            //MessageBox.Show(resBX.ToString()+ resBY.ToString());
 
             //      END RES BLOCKS
         }
@@ -198,31 +196,32 @@ namespace FOIE
         static public void getHints()
         {
             hintBook.Clear();
-
             string path = System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-            string[] lines = System.IO.File.ReadAllLines(@path + "\\hintbook.ini");
-
-            foreach (string line in lines)
+           
+            try
             {
-                string l = line.Trim();
-                int indexOfCharEquals = l.IndexOf('=');
-                int indexOfCharSharp = l.IndexOf('#');
+                string[] lines = System.IO.File.ReadAllLines(@path + "\\hintbook.ini");
 
-                if (indexOfCharEquals > 0 && indexOfCharSharp != 0)
+                foreach (string line in lines)
                 {
-                    string key = l.Substring(0, indexOfCharEquals);
-                    key = key.Trim();
-                    string val = l.Substring(indexOfCharSharp + 1);
-                    val = val.Trim();
-                    hintBook[key] = val;
-                    //MessageBox.Show(key+" "+val);
+                    string l = line.Trim();
+                    int indexOfCharSharp = l.IndexOf('#');
+
+                    if (indexOfCharSharp > 0)
+                    {
+                        string key = l.Substring(0, indexOfCharSharp);
+                        key = key.Trim();
+                        string val = l.Substring(indexOfCharSharp + 1);
+                        val = val.Trim();
+                        hintBook[key] = val;
+                    }
                 }
-
             }
-
+            catch
+            {
+                // hints file cant be read
+            }
         }
-
-
 
         //-------------------------------------------------------------------------------
 

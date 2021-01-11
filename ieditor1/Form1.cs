@@ -130,9 +130,9 @@ namespace ieditor1
             string imgSize = pSize.Width + "x" + pSize.Height;
             
 
-            addTxtControlsLine(name, name, false, false, areaValue, areaSize, false, "area", true);
+            addTxtControlsLine(name, name, false, false, areaValue, areaSize, false, "Area", true);
 
-            addTxtControlsLine(name, bgImage, false, false, picName, imgSize, true, "picture", imgExist);
+            addTxtControlsLine(name, bgImage, false, false, picName, imgSize, true, "Picture", imgExist);
 
 
             picture.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
@@ -193,7 +193,7 @@ namespace ieditor1
  
             string areaSize = Editor.getSizeFromStringCoords(value);
 
-            addTxtControlsLine(null, name, true, true, value, areaSize, false, "area", true);
+            addTxtControlsLine(null, name, true, true, value, areaSize, false, "Area", true);
         }
 
 
@@ -206,7 +206,7 @@ namespace ieditor1
             {
                 value = Editor.iniArray[name];
             }
-                addTxtControlsLine(null, name, false, false, value, "", false, "custom", true);
+                addTxtControlsLine(null, name, false, false, value, "", false, "Custom", true);
 
         }
 
@@ -260,7 +260,7 @@ namespace ieditor1
             string imgSize = cSize.Width + "x" + cSize.Height;
 
 
-            addTxtControlsLine(name, name, true, true, areaValue, imgSize, false, "area", true);
+            addTxtControlsLine(name, name, true, true, areaValue, imgSize, false, "Area", true);
 
             //---------------------------------------------------------------------
             for (int i = 1; i < line.Length; i++)
@@ -284,7 +284,7 @@ namespace ieditor1
                     picSize = "error";
                     picExist = false;
                 }
-                addTxtControlsLine(line[0], line[i], false, false, value, picSize, true, "picture", picExist);
+                addTxtControlsLine(line[0], line[i], false, false, value, picSize, true, "Picture", picExist);
             }
             
         }
@@ -477,13 +477,13 @@ namespace ieditor1
                     Tag = "Up",
                 };
                 zBttn.Click += (sender, e) => { changeZLayer(zBttn, e); };
-                new ToolTip().SetToolTip(zBttn, "Bring to front/ Send");
+                new ToolTip().SetToolTip(zBttn, "Bring to front/ send to back");
                 p.Controls.Add(zBttn);
 
             }
 
 
-            if (controlType == "picture")
+            if (controlType == "Picture")
             {
                 var CheckBox = new CheckBox
                 {
@@ -681,6 +681,7 @@ namespace ieditor1
 
             if (saveTo != null)
             {
+                //Editor.getUnassignedKeys();
                 fileSaver(saveTo);
             }
         }
@@ -688,11 +689,12 @@ namespace ieditor1
 
         private void fileSaver(string filePath)
         {
+            Dictionary<string, string> unassignedKeys = new Dictionary<string, string>(Editor.iniArray);    // duplicate ini array
+
             using (System.IO.StreamWriter file = new System.IO.StreamWriter(@filePath))
             {
                 foreach (string line in Editor.jsonKeys)
                 {
-
                     file.WriteLine("#");
                     file.WriteLine("#" + line);
                     file.WriteLine("#");
@@ -713,20 +715,40 @@ namespace ieditor1
                                 foreach (string n in array)
                                 {
                                     if (Editor.iniArray.ContainsKey(n))
+                                    {
                                         file.WriteLine(n + " = " + Editor.iniArray[n]);
-                                }
+                                        unassignedKeys.Remove(n);
+                                    }
+                                 }
                             }
                             else
                             {
                                 string name = (string)i.ToObject(typeof(string));
                                 if (Editor.iniArray.ContainsKey(name))
+                                {
                                     file.WriteLine(name + "=" + Editor.iniArray[name]);
+                                    unassignedKeys.Remove(name);
+                                }
                             }
                         }
                     }
 
                     file.WriteLine("");
                 }
+
+                if (unassignedKeys.Count > 0)
+                {
+                    file.WriteLine("");
+                    file.WriteLine("#");
+                    file.WriteLine("#Unassigned Keys");
+                    file.WriteLine("#");
+
+                    foreach (KeyValuePair<string, string> entry in unassignedKeys)
+                    {
+                        file.WriteLine(entry.Key + "=" + entry.Value);
+                    }
+                }
+
             }
         }
 
@@ -960,7 +982,7 @@ namespace ieditor1
             string type = (string)((Control)sender).Tag;
             //msgBox(type);
 
-            if (type == "picture")
+            if (type == "Picture")
             {
                 CheckBox cb = this.Controls.Find("cb" + name, true).FirstOrDefault() as CheckBox;
                 readImageStats(name);
@@ -970,7 +992,7 @@ namespace ieditor1
                     setImage(currentGroup, name);
                 }
             }
-            else if (type == "area")
+            else if (type == "Area")
             {
                 string str = ((Control)sender).Text;
                 int[] coords = Editor.stringToRectArray(str);
@@ -987,7 +1009,7 @@ namespace ieditor1
                     stb.Text = "Error!";
                 }
 
-            } else if (type == "custom")
+            } else if (type == "Custom")
             {
                 // Update Array data
                 // nothing more
