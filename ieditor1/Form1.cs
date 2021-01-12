@@ -73,29 +73,20 @@ namespace ieditor1
         {
             string areaValue = "0 0 0 0";
             string picName = "";
+            
+            Bitmap img;
 
-            if (Editor.iniArray.ContainsKey(name))
-            {
-                areaValue = Editor.iniArray[name];
-            }
+            Size pSize = new Size(0, 0);
+            Size cSize = new Size(0, 0);
+
+            //-----------------------------------------------------------------------------------
+
             if (Editor.iniArray.ContainsKey(bgImage))
             {
                 picName = Editor.iniArray[bgImage];
             }
 
-
-
-            int[] coords = Editor.stringToRectArray(areaValue);
-             string path = (Editor.fullPath + picName);
-
-            Bitmap img;
-            Size pSize;
-
-            Size cSize = new Size(0, 0);
-            if (isValidRect(coords))
-            {
-                cSize = new Size(coords[2] - coords[0], coords[3] - coords[1]);
-            }
+            string path = (Editor.fullPath + picName);
 
             bool imgExist = true;
             try
@@ -106,9 +97,27 @@ namespace ieditor1
             catch
             {
                 img = new Bitmap(FOIE.Properties.Resources.nofile1);
-                pSize = cSize;
                 imgExist = false;
             }
+
+            //-----------------------------------------------------------------------------------
+
+            if (Editor.iniArray.ContainsKey(name))
+            {
+                areaValue = Editor.iniArray[name];
+                
+                int[] coords = Editor.stringToRectArray(areaValue);
+                if (isValidRect(coords))
+                {
+                    cSize = new Size(coords[2] - coords[0], coords[3] - coords[1]);
+                }
+            }
+
+            if (name == "0")
+            {
+                if (imgExist)   cSize = pSize;
+                else            cSize = new Size(0, 0);
+            } 
 
             var picture = new PictureBox
             {
@@ -119,28 +128,19 @@ namespace ieditor1
                 BackgroundImageLayout = ImageLayout.None,
             };
 
-            //Editor.mainImageWidth = panel1.Width;
-            //Editor.mainImageHeight = panel1.Height;
-
             picture.LocationChanged += new System.EventHandler(this.pictureBox1_LocationChanged);
             picture.SizeChanged += new System.EventHandler(this.pictureBox1_LocationChanged);
-
 
             string areaSize = Editor.getSizeFromStringCoords(areaValue);
             string imgSize = pSize.Width + "x" + pSize.Height;
             
-
             addTxtControlsLine(name, name, false, false, areaValue, areaSize, false, "Area", true);
 
             addTxtControlsLine(name, bgImage, false, false, picName, imgSize, true, "Picture", imgExist);
 
-
             picture.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
             panel1.Controls.Add(picture);
 
-         
-
-            //MessageBox.Show(panel1.Width.ToString());
         }
 
         //  --------------  ADD CONTROL NO PICTURE  --------------
@@ -681,7 +681,6 @@ namespace ieditor1
 
             if (saveTo != null)
             {
-                //Editor.getUnassignedKeys();
                 fileSaver(saveTo);
             }
         }
@@ -738,10 +737,10 @@ namespace ieditor1
 
                 if (unassignedKeys.Count > 0)
                 {
-                    file.WriteLine("");
                     file.WriteLine("#");
                     file.WriteLine("#Unassigned Keys");
                     file.WriteLine("#");
+                    file.WriteLine("");
 
                     foreach (KeyValuePair<string, string> entry in unassignedKeys)
                     {
@@ -806,18 +805,26 @@ namespace ieditor1
             clearGui();
             this.panel2.Visible = false;
 
-            var bG = Editor.json[item]["Main"] as JArray;
 
-            string mainImg = (string)bG[0].ToObject(typeof(string));
-            string mainBg = (string)bG[1].ToObject(typeof(string));
+            if (Editor.json[item]["Main"] != null)
+            {
+                var bG = Editor.json[item]["Main"] as JArray;
+
+                if(bG.Count > 0)
+                {
+                    string mainImg = (string)bG[0].ToObject(typeof(string));
+                    string mainBg = (string)bG[1].ToObject(typeof(string));
+
+                    Editor.currentBackground = mainImg;
+
+                    addMainPic(mainImg, mainBg);
+                }
+            }
 
 
-            Editor.currentBackground = mainImg;
 
- 
-
-               addMainPic(mainImg, mainBg);
-
+            if (Editor.json[item]["Controls"] != null)
+            {
                 var Controls = Editor.json[item]["Controls"] as JArray;
 
                 foreach (var i in Controls)
@@ -833,8 +840,10 @@ namespace ieditor1
                             addGameControl(name);
                     }
                 }
+            }
+           
 
-                var CustomFields = Editor.json[item]["Custom"] as JArray;
+            var CustomFields = Editor.json[item]["Custom"] as JArray;
                 foreach (var i in CustomFields)
                 {
                     string name = (string)i.ToObject(typeof(string));
