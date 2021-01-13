@@ -23,6 +23,7 @@ namespace FOIE
 
         static public string fullPath = "";
         static public string iniPath = "";
+        static public string cfgPath = "default.cfg";
         static public string currentBackground = "";
 
         static public Dictionary<string, string> iniArray = new Dictionary<string, string>();
@@ -141,8 +142,6 @@ namespace FOIE
         }
 
 
-
-
         //---------------------------------------------------------------------------------
         static public int[] stringToRectArray(string str)
         {
@@ -166,22 +165,26 @@ namespace FOIE
             return ret;
         }
 
-        static public List<string> jsonKeys = new List<string>();
+        //---------------------------------------------------------------------------------
 
-        static public JObject json = new JObject();
+        //      READ JSON CONFIG
+
+        static public List<string> configJsonKeys = new List<string>();
+        static public JObject configJSON = new JObject();
 
         static public bool GetJson()
         {
-            json.RemoveAll();
+            configJSON.RemoveAll();
             string jsonPath = System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             try
             {
-                string jsonString = System.IO.File.ReadAllText(@jsonPath + "\\config.json");
-                json = JObject.Parse(jsonString);
-                jsonKeys.Clear();
-                foreach (JProperty property in json.Properties())
+                string jsonString = System.IO.File.ReadAllText(@jsonPath + "\\" +@cfgPath);
+                configJSON = JObject.Parse(jsonString);
+                
+                configJsonKeys.Clear();
+                foreach (JProperty property in configJSON.Properties())
                 {
-                    jsonKeys.Add(property.Name);
+                    configJsonKeys.Add(property.Name);
                 }
                 return true;
             }

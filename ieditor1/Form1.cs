@@ -12,6 +12,7 @@ namespace ieditor1
 {
     public partial class Form1 : Form
     {
+
         public Form1()
         {
             InitializeComponent();
@@ -36,7 +37,7 @@ namespace ieditor1
         private void generateStripMenu()
         {
             toolStripScreen.DropDownItems.Clear();
-            foreach (string line in Editor.jsonKeys)
+            foreach (string line in Editor.configJsonKeys)
             {
                 ToolStripItem item = new ToolStripMenuItem();
                 item.Text = line;
@@ -113,7 +114,8 @@ namespace ieditor1
                 }
             }
 
-            if (name == "0")
+            //if (name == "0")
+            if (name == "")
             {
                 if (imgExist)   cSize = pSize;
                 else            cSize = new Size(0, 0);
@@ -692,7 +694,7 @@ namespace ieditor1
 
             using (System.IO.StreamWriter file = new System.IO.StreamWriter(@filePath))
             {
-                foreach (string line in Editor.jsonKeys)
+                foreach (string line in Editor.configJsonKeys)
                 {
                     file.WriteLine("#");
                     file.WriteLine("#" + line);
@@ -704,7 +706,7 @@ namespace ieditor1
                     foreach (string key in fields)
                     {
 
-                        var Controls = Editor.json[line][key] as JArray;
+                        var Controls = Editor.configJSON[line][key] as JArray;
 
                         foreach (var i in Controls)
                         {
@@ -765,8 +767,7 @@ namespace ieditor1
                 Editor.iniPath = newIni;
 
                 Editor.iniRead(newIni);
-                drawDefault(Editor.jsonKeys[0]);
-
+                drawDefault(Editor.configJsonKeys[0]);
 
                 this.Text = newIni;
             }
@@ -794,8 +795,6 @@ namespace ieditor1
             }
                 return openFileDialog1.FileName;
             }
-               
-            
         }
 
         //------------------------------------------------------------------------------------------------------------------
@@ -806,9 +805,9 @@ namespace ieditor1
             this.panel2.Visible = false;
 
 
-            if (Editor.json[item]["Main"] != null)
+            if (Editor.configJSON[item]["Main"] != null)
             {
-                var bG = Editor.json[item]["Main"] as JArray;
+                var bG = Editor.configJSON[item]["Main"] as JArray;
 
                 if(bG.Count > 0)
                 {
@@ -823,9 +822,9 @@ namespace ieditor1
 
 
 
-            if (Editor.json[item]["Controls"] != null)
+            if (Editor.configJSON[item]["Controls"] != null)
             {
-                var Controls = Editor.json[item]["Controls"] as JArray;
+                var Controls = Editor.configJSON[item]["Controls"] as JArray;
 
                 foreach (var i in Controls)
                 {
@@ -843,7 +842,7 @@ namespace ieditor1
             }
            
 
-            var CustomFields = Editor.json[item]["Custom"] as JArray;
+            var CustomFields = Editor.configJSON[item]["Custom"] as JArray;
                 foreach (var i in CustomFields)
                 {
                     string name = (string)i.ToObject(typeof(string));
@@ -1059,30 +1058,36 @@ namespace ieditor1
             panel2.AutoScroll = true;
         }
 
+        public void getSettingsUpdate()
+        {
+            fefreshJSON();
+            drawDefault(Editor.configJsonKeys[0]);
+        }
 
+
+        public void fefreshJSON()
+        {
+            Editor.GetJson();
+            generateStripMenu();
+        }
+
+
+        // ------------UP MENU----------------------------------------------------
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
             openProject();
         }
-
-
-        // ------------UP MENU----------------------------------------------------
             
         private void refreshJSONToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Editor.GetJson();
-            generateStripMenu();
+            fefreshJSON();
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             fileSaver(Editor.iniPath);
         }
-        
-
-
-
 
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1094,421 +1099,17 @@ namespace ieditor1
             this.Close();
         }
 
-
-        //-----------------------------------------------------------------------------
-
-    }
-
-
-
-}
-
-//###################################################################################################################
-
-/*
- *                 private void button1_Click(object sender, EventArgs e)
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
-
-            Bitmap image = new Bitmap(@"C:\give_x.png");
-
-            var picture = new PictureBox
+            SettingsForm sf = new SettingsForm();
+            var result = sf.ShowDialog();
+            if (result == DialogResult.OK)
             {
-                Name = "pictureBox2",
-                Size = new Size(300, 300),
-                Location = new Point(100, 100),
-               // Image = Image.FromFile(@path),
-                BackColor = Color.Transparent
-
-            };
-
-            this.Controls.Add(picture);
-
-
-
-
-
-
-             ControlMoverOrResizer.Init(this.Controls.Find("pictureBox2", true).FirstOrDefault());
-
-
-            Graphics x = this.Controls.Find("pictureBox2", true).FirstOrDefault().CreateGraphics();
-           
-            x.DrawImage(image, new Rectangle(0, 0, image.Width, image.Height));
-            x.DrawImage(image, new Rectangle(50, 50, image.Width, image.Height));
-           
-            //  picAdd("C:\\give_x.png", 250, 250, 100, 100);
-            // picAdd("C:\\give_x.png", 250, 250, 200, 200);
+                //string val = sf.ReturnValue1;
+                getSettingsUpdate();
+            }
         }
 
-
-        private void picAdd(string path, int sizeX, int sizeY, int locX, int locY)
-        {
-            var picture = new PictureBox
-            {
-               Name = "pictureBox",
-                Size = new Size(sizeX, sizeY),
-                Location = new Point(locX, locY),
-                Image = Image.FromFile(@path),
-                BackColor = Color.Transparent
-
-        };
-            this.Controls.Add(picture);
-            //pictureBox.BackColor = Color.Transparent;
-            //ControlMoverOrResizer.Init(picture);
-        }
-
-
-
-
-//------------------------------------------------------------------------------------------------------------------
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            Bitmap bgimage = new Bitmap(@"C:\dialogbox_top_x.png");
-            Bitmap img1 = new Bitmap(@"C:\squarw.png");
-            Bitmap img2 = new Bitmap(@"C:\say_x.png");
-
-
-            var picture = new PictureBox
-            {
-               // Name = "pictureBox1",
-                Size = new Size(bgimage.Width, bgimage.Height),
-                Location = new Point(0, 0),
-                Image = bgimage,
-                //BackColor = Color.Transparent
-
-            };
-            var picture2 = new PictureBox
-            {
-                   
-                Size = new Size(img1.Width, img1.Height),
-                Location = new Point(0, 0),
-                BackgroundImage = img1,
-                BackgroundImageLayout = ImageLayout.Stretch,
-                BackColor = Color.Transparent
-
-            };
-            var picture3 = new PictureBox
-            {
-              //  Size = new Size(img2.Width, img2.Height),
-                Location = new Point(0, 0),
-                BackgroundImage = img2,
-                BackgroundImageLayout= ImageLayout.Stretch,
-                BackColor = Color.Transparent
-
-            };
-
-
-
-
-
-            this.Controls.Add(picture);
-            picture.Controls.Add(picture2);
-            picture.Controls.Add(picture3);
-
-
-
-
-            ControlMoverOrResizer.Init(picture2);
-            ControlMoverOrResizer.Init(picture3);
-
-
-        }
-
-    */
-            //picBox.Paint +=  new PaintEventHandler(pictureBox1_Paint(,,"er"));
-
-/*
-
-//Graphics g = (picture).CreateGraphics();
-
-
-// Create font and brush.
-Font drawFont = new Font("Arial", 32);
-SolidBrush drawBrush = new SolidBrush(Color.Black);
-
-// Create point for upper-left corner of drawing.
-
-
-// Draw string to screen.
- g.DrawString(name, drawFont, drawBrush, 0, 0);
-
-RectangleF drawRect = new RectangleF(0, 0, coords[2], coords[3]);
-// Set format of string.
-StringFormat drawFormat = new StringFormat();
-drawFormat.Alignment = StringAlignment.Near;
-
-// g.DrawString(name, drawFont, drawBrush, drawRect, drawFormat);
-
-g.DrawEllipse(
-new Pen(Color.Red, 2f),
-0, 0, 100, 200);
-iimg.Invalidate();
-*/
-/*        public void DrawStringRectangleFormat(Graphics g)
-        {
-            // Create string to draw.
-            String drawString = "Sample Text is too long to fit into this tiny lil rectangle area right here";
-
-            // Create font and brush.
-            Font drawFont = new Font("Arial", 16);
-            SolidBrush drawBrush = new SolidBrush(Color.Black);
-
-            // Create rectangle for drawing.
-            float x = 150.0F;
-            float y = 150.0F;
-            float width = 200.0F;
-            float height = 50.0F;
-            RectangleF drawRect = new RectangleF(x, y, width, height);
-
-            // Set format of string.
-            StringFormat drawFormat = new StringFormat();
-            drawFormat.Alignment = StringAlignment.Center;
-
-            // Draw string to screen.
-            g.DrawString(drawString, drawFont, drawBrush, drawRect, drawFormat);
-        }
-        private void addPic(string path, int sizeX, int sizeY, int locX, int locY)
-        {
-            Bitmap img = new Bitmap(@path);
-            var picture = new PictureBox
-            {
-                Location = new Point(locX, locY),
-                Size = new Size(sizeX, sizeY),
-                BackgroundImage = img,
-                BackgroundImageLayout = ImageLayout.Stretch,
-                BackColor = Color.Transparent
-            };
-
-            PictureBox bgImg = this.Controls.Find("imgMain", true).FirstOrDefault() as PictureBox;
-            bgImg.Controls.Add(picture);
-            ControlMoverOrResizer.Init(picture);
-
-        }
-
-        public void UpdateBox()
-        {
-            textBox1.Text = "hello";
-        }
-
-
-        public void cb(object sender, string s)
-        {
-           // var x = ((Control)sender).Name;
-
-           // textBox1.Clear();
-            var x = this.textBox1.Text;
-            MessageBox.Show(s, x, MessageBoxButtons.YesNo);
-            var text = new TextBox
-            {
-                Name = "xxx",
-                Size = new Size(200, 20),
-                Location = new Point(600, 250),
-                Text = "imgMain",
-            };
-            Controls.Add(text);
-
-
-        }
-        */
-
-/* OLD
-         //      ADD addBttnControl
-    private void addBttnControl(string[] bttnName, string picName)
-    {
-        int[] coords = Editor.stringToRectArray(Editor.iniArray[bttnName]);
-
-        string path = Editor.fullPath + Editor.iniArray[picName];
-        Bitmap img = new Bitmap(@path);
-
-        var picture = new PictureBox
-        {
-            Name = picName,
-            Location = new Point(coords[0], coords[1]),
-            Size = new Size(coords[2] - coords[0], coords[3] - coords[1]),
-            BackgroundImage = img,
-            BackgroundImageLayout = ImageLayout.None,
-            BackColor = Color.Transparent,
-        };
-
-        PictureBox bgImg = this.Controls.Find("imgMain", true).FirstOrDefault() as PictureBox;
-        bgImg.Controls.Add(picture);
-        PictureBox picBox = this.Controls.Find(picName, true).FirstOrDefault() as PictureBox;
-        picBox.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
-
-
-        var lbl = new Label
-        {
-            Name = bttnName,
-            Size = new Size(75, 20),
-            Location = new Point(550, 25 * Editor.lineCounter),
-            Text = bttnName,
-        };
-        var txt = new TextBox
-        {
-            Name = picName,
-            Size = new Size(200, 20),
-            Location = new Point(650, 25 * Editor.lineCounter),
-
-            //Text = Editor.iniArray[name],
-        };
-
-
-       // new ToolTip().SetToolTip(txt, "tooltip text here");
-       // new ToolTip().SetToolTip(lbl, "tooltip text here");
-
-        this.Controls.Add(lbl);
-        this.Controls.Add(txt);
-
-
-        Editor.lineCounter++;
-
-        ControlMoverOrResizer.Init(picBox, txt);
-
-    }
-*/
-
-
-
-/*
-
-//  DRAW INVENTORY
-
-private void drawInventory()
-{
-clearGui();
-
-string mainImg = (string)Editor.json["Inventory"]["Main"].ToObject(typeof(string));
-addMainPic(mainImg);
-
-var Controls = Editor.json["Inventory"]["Controls"] as JArray;
-
-foreach (var i in Controls)
-{
-    if (i.GetType().Name == "JArray")
-    {
-        string[] array = (string[])i.ToObject(typeof(string[]));
-        if (Editor.iniArray.ContainsKey(array[0]))
-            addBttnControl(array);
-    }
-    else
-    {
-        string name = (string)i.ToObject(typeof(string));
-        if (Editor.iniArray.ContainsKey(name))
-            addGameControl(name);
-    }
-}
-}
-
-//  DRAW FIX BOY
-
-private void drawFb()
-{
-clearGui();
-
-string mainImg = (string)Editor.json["Fixboy"]["Main"].ToObject(typeof(string));
-addMainPic(mainImg);
-
-var Controls = Editor.json["Fixboy"]["Controls"] as JArray;
-
-foreach (var i in Controls)
-{
-    if (i.GetType().Name == "JArray")
-    {
-        string[] array = (string[])i.ToObject(typeof(string[]));
-        if (Editor.iniArray.ContainsKey(array[0]))
-            addBttnControl(array);
-    }
-    else
-    {
-        string name = (string)i.ToObject(typeof(string));
-        if (Editor.iniArray.ContainsKey(name))
-            addGameControl(name);
     }
 }
 
-}
-
-//      DRAW DIALOG
-
-private void drawDialog()
-{
-clearGui();
-
-string mainImg = (string)Editor.json["Dialog"]["Main"].ToObject(typeof(string));
-addMainPic(mainImg);
-
-var Controls = Editor.json["Dialog"]["Controls"] as JArray;
-
-foreach (var i in Controls)
-{
-    if (i.GetType().Name == "JArray")
-    {
-        string[] array = (string[])i.ToObject(typeof(string[]));
-        if (Editor.iniArray.ContainsKey(array[0]))
-            addBttnControl(array);
-    }
-    else
-    {
-        string name = (string)i.ToObject(typeof(string));
-        if (Editor.iniArray.ContainsKey(name))
-            addGameControl(name);
-    }
-}
-
-}
-
-private void drawBarter()
-{
-clearGui();
-
-string mainImg = (string)Editor.json["Barter"]["Main"].ToObject(typeof(string));
-addMainPic(mainImg);
-
-var Controls = Editor.json["Barter"]["Controls"] as JArray;
-
-foreach (var i in Controls)
-{
-    if (i.GetType().Name == "JArray")
-    {
-        string[] array = (string[])i.ToObject(typeof(string[]));
-        if (Editor.iniArray.ContainsKey(array[0]))
-            addBttnControl(array);
-    }
-    else
-    {
-        string name = (string)i.ToObject(typeof(string));
-        if (Editor.iniArray.ContainsKey(name))
-            addGameControl(name);
-    }
-}
-
-}
-private void drawCharacter()
-{
-clearGui();
-panel2.Visible = false;
-string mainImg = (string)Editor.json["Character"]["Main"].ToObject(typeof(string));
-addMainPic(mainImg);
-
-var Controls = Editor.json["Character"]["Controls"] as JArray;
-
-foreach (var i in Controls)
-{
-    if (i.GetType().Name == "JArray")
-    {
-        string[] array = (string[])i.ToObject(typeof(string[]));
-        if (Editor.iniArray.ContainsKey(array[0]))
-            addBttnControl(array);
-    }
-    else
-    {
-        string name = (string)i.ToObject(typeof(string));
-        if (Editor.iniArray.ContainsKey(name))
-            addGameControl(name);
-    }
-}
-panel2.Visible = true;
-} */
-    
