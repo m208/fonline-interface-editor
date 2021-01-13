@@ -19,6 +19,9 @@ namespace ieditor1
         }
         private void Form1_Load(object sender, EventArgs e)
         {
+
+            Editor.ReadParam(); // get registry saved settings
+
             bool configRead = Editor.GetJson();
             Editor.getHints();
 
@@ -534,16 +537,6 @@ namespace ieditor1
 
 //--------------------------------------------------------------------------------------------------------------
 
-
-
-        //-----------------------------------------------------------------
-
-        private void msgBox(string msg)
-        {
-            MessageBox.Show(msg);
-        }
-
-
         private void changeZLayer(object sender, EventArgs e)
         {
             string name = ((Control)sender).Name.Substring("zBttn".Length); // crop "zBttn"
@@ -787,12 +780,12 @@ namespace ieditor1
             else
             {
                 if (sameFolderRequired) { 
-                    while (!openFileDialog1.FileName.Contains(Editor.fullPath))
+                    while (!openFileDialog1.FileName.Contains(openFileDialog1.InitialDirectory))
                     {
                         MessageBox.Show("Please select file which is in the default folder", "Wrong folder", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         openFileDialog1.ShowDialog();
+                    }
                 }
-            }
                 return openFileDialog1.FileName;
             }
         }
@@ -1060,6 +1053,7 @@ namespace ieditor1
 
         public void getSettingsUpdate()
         {
+            Editor.WriteParam();
             fefreshJSON();
             drawDefault(Editor.configJsonKeys[0]);
         }

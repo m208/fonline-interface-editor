@@ -70,7 +70,7 @@ namespace FOIE
             // 
             // buttonOk
             // 
-            this.buttonOk.Location = new System.Drawing.Point(96, 154);
+            this.buttonOk.Location = new System.Drawing.Point(91, 154);
             this.buttonOk.Name = "buttonOk";
             this.buttonOk.Size = new System.Drawing.Size(97, 41);
             this.buttonOk.TabIndex = 3;

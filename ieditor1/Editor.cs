@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using Microsoft.Win32;
+
 
 namespace FOIE
 {
@@ -21,16 +23,55 @@ namespace FOIE
             ["error"] = "icon_error",
         };
 
+        static public string currentBackground = "";
         static public string fullPath = "";
         static public string iniPath = "";
-        static public string cfgPath = "default.cfg";
-        static public string currentBackground = "";
+        
+        static public string cfgPath = "default.cfg";   // default name
 
+
+        static public Dictionary<string, string> hintBook = new Dictionary<string, string>();
         static public Dictionary<string, string> iniArray = new Dictionary<string, string>();
         static public int lineCounter = 0;
         static public int mainImageWidth = 0, mainImageHeight = 0;
 
-        static public Dictionary<string, string> hintBook = new Dictionary<string, string>();
+
+        //      Registry job   -------------------------------------------
+        static string regKeyName = "Software\\FOnline Interface Editor";
+
+        public static void WriteParam()
+        {
+            RegistryKey rk = null;
+            try
+            {
+                rk = Registry.CurrentUser.CreateSubKey(regKeyName);
+                if (rk == null) return;
+
+                rk.SetValue("ConfigFile", cfgPath);
+                
+            }
+            finally
+            {
+                if (rk != null) rk.Close();
+            }
+        }
+
+        public static void ReadParam()
+        {
+            RegistryKey rk = null;
+            try
+            {
+                rk = Registry.CurrentUser.OpenSubKey(regKeyName);
+                if (rk != null){
+                    cfgPath = (string)rk.GetValue("ConfigFile");
+                }
+            }
+            finally
+            {
+                if (rk != null) rk.Close();
+            }
+        }
+        //---------------------------------------------------------
 
 
         //  --------------  INI READING     -----------------------
