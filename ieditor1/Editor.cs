@@ -63,7 +63,8 @@ namespace FOIE
             {
                 rk = Registry.CurrentUser.OpenSubKey(regKeyName);
                 if (rk != null){
-                    cfgPath = (string)rk.GetValue("ConfigFile");
+                    string val = (string)rk.GetValue("ConfigFile");
+                    if (val != "") cfgPath = val;
                 }
             }
             finally

@@ -8,7 +8,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using FOIE;
 
 namespace FOIE
 {
@@ -68,7 +67,7 @@ namespace FOIE
         private void buttonOk_Click(object sender, EventArgs e)
         {
             //this.ReturnValue1 = "Something";
-            if (newcfg != null)
+            if (newcfg != null && newcfg != "")
             {
                 Editor.cfgPath = newcfg;
             }

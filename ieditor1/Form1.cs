@@ -31,8 +31,10 @@ namespace ieditor1
                 //openDefault();
             } else
             {
-                MessageBox.Show("Error reading config.json");
-                this.Close();
+                MessageBox.Show("Error reading config file");
+                openSettingsForm();
+                //this.Close();
+
             }
 
         }
@@ -763,6 +765,8 @@ namespace ieditor1
                 drawDefault(Editor.configJsonKeys[0]);
 
                 this.Text = newIni;
+
+                saveAsToolStripMenuItem.Enabled = true;
             }
         }
 
@@ -981,7 +985,6 @@ namespace ieditor1
         {
             string name = ((Control)sender).Name.Substring("tb".Length);
             string type = (string)((Control)sender).Tag;
-            //msgBox(type);
 
             if (type == "Picture")
             {
@@ -1054,19 +1057,29 @@ namespace ieditor1
         public void getSettingsUpdate()
         {
             Editor.WriteParam();
-            fefreshJSON();
+            refreshJSON();
             drawDefault(Editor.configJsonKeys[0]);
         }
 
 
-        public void fefreshJSON()
+        public void refreshJSON()
         {
             Editor.GetJson();
             generateStripMenu();
         }
 
+        private void openSettingsForm()
+        {
+            SettingsForm sf = new SettingsForm();
+            var result = sf.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                //string val = sf.ReturnValue1;
+                getSettingsUpdate();
+            }
+        }
 
-        // ------------UP MENU----------------------------------------------------
+        // ------------ STRIP  MENU ----------------------------------------------------
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1075,7 +1088,7 @@ namespace ieditor1
             
         private void refreshJSONToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            fefreshJSON();
+            refreshJSON();
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1095,14 +1108,10 @@ namespace ieditor1
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SettingsForm sf = new SettingsForm();
-            var result = sf.ShowDialog();
-            if (result == DialogResult.OK)
-            {
-                //string val = sf.ReturnValue1;
-                getSettingsUpdate();
-            }
+            openSettingsForm();
         }
+
+
 
     }
 }
