@@ -75,6 +75,14 @@ namespace ieditor1
 
         //  --------------  ADD MAIN PIC    --------------
 
+        private Bitmap LoadBitmapUnlocked(string file_name)
+        {
+            using (Bitmap bm = new Bitmap(file_name))
+            {
+                return new Bitmap(bm);
+            }
+        }
+
         private void addMainPic(string name, string bgImage)
         {
             string areaValue = "0 0 0 0";
@@ -97,7 +105,7 @@ namespace ieditor1
             bool imgExist = true;
             try
             {
-                img = new Bitmap(@path);
+                img = LoadBitmapUnlocked(@path);
                 pSize = new Size(img.Width, img.Height);
             }
             catch
@@ -119,8 +127,8 @@ namespace ieditor1
                 }
             }
 
-            //if (name == "0")
-            if (name == "")
+            if (name == "0")
+            //if (name == "" || name == null)
             {
                 if (imgExist)   cSize = pSize;
                 else            cSize = new Size(0, 0);
@@ -280,7 +288,8 @@ namespace ieditor1
                 string path = Editor.fullPath + value;
                 try
                 {
-                    img = new Bitmap(@path);
+                    //img = new Bitmap(@path);
+                    img = LoadBitmapUnlocked(@path);
                     cSize = new Size(img.Width, img.Height);
                     picSize = cSize.Width + "x" + cSize.Height;
                     
@@ -767,6 +776,7 @@ namespace ieditor1
                 this.Text = newIni;
 
                 saveAsToolStripMenuItem.Enabled = true;
+                saveToolStripMenuItem.Enabled = true;
             }
         }
 
@@ -929,7 +939,8 @@ namespace ieditor1
 
             try
             {
-                Bitmap img = new Bitmap(@path);
+                //Bitmap img = new Bitmap(@path);
+                Bitmap img = LoadBitmapUnlocked(@path);
                 pb.Image = img;
             }
             catch
@@ -965,7 +976,8 @@ namespace ieditor1
 
             try
             {
-                Bitmap img = new Bitmap(@path);
+                //Bitmap img = new Bitmap(@path);
+                Bitmap img = LoadBitmapUnlocked(@path);
                 newSize = img.Width + "x" + img.Height;
                 imgSrc = Editor.controlTypesResources[controlType];
                 //Update Array data
