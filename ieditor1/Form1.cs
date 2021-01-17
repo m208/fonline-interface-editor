@@ -263,7 +263,8 @@ namespace ieditor1
             string imgMain = Editor.currentBackground;
             PictureBox bgImg = panel1.Controls.Find(imgMain, true).FirstOrDefault() as PictureBox;
 
-            new ToolTip().SetToolTip(picture, name);
+            string hint = Editor.getHintforKey(name);
+            new ToolTip().SetToolTip(picture, hint);
 
             bgImg.Controls.Add(picture);
             PictureBox picBox = this.Controls.Find(name, true).FirstOrDefault() as PictureBox;

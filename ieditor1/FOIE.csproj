@@ -55,10 +55,10 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>false</SignManifests>
+    <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>D3DA97E04045335C860A3798BE216E3E29E82DBB</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>0DE41F30A7B0B1E1950C1FA4405BB22F2F6EEACF</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestKeyFile>
@@ -125,6 +125,7 @@
     <EmbeddedResource Include="SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="FOIE_1_TemporaryKey.pfx" />
     <None Include="FOIE_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
