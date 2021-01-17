@@ -145,6 +145,7 @@ namespace ieditor1
 
             picture.LocationChanged += new System.EventHandler(this.pictureBox1_LocationChanged);
             picture.SizeChanged += new System.EventHandler(this.pictureBox1_LocationChanged);
+            picture.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
 
             string areaSize = Editor.getSizeFromStringCoords(areaValue);
             string imgSize = pSize.Width + "x" + pSize.Height;
@@ -153,7 +154,11 @@ namespace ieditor1
 
             addTxtControlsLine(name, bgImage, false, false, picName, imgSize, true, "Picture", imgExist);
 
-            picture.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
+            ControlMoverOrResizer.Init(picture);    //allow move and resize main BG
+
+            string hint = Editor.getHintforKey(name);
+            new ToolTip().SetToolTip(picture, hint);
+
             panel1.Controls.Add(picture);
 
         }
@@ -191,8 +196,9 @@ namespace ieditor1
 
             string imgMain = Editor.currentBackground;
             PictureBox bgImg = panel1.Controls.Find(imgMain, true).FirstOrDefault() as PictureBox;
-            
-            new ToolTip().SetToolTip(picture, name);
+
+            string hint = Editor.getHintforKey(name);
+            new ToolTip().SetToolTip(picture, hint);
 
             bgImg.Controls.Add(picture);
             PictureBox picBox = this.Controls.Find(name, true).FirstOrDefault() as PictureBox;
@@ -417,11 +423,8 @@ namespace ieditor1
                 };
 
             // tool tips from dictionary
-            string hint = "";
-            if (Editor.hintBook.ContainsKey(name))
-            {
-                hint = Editor.hintBook[name];
-            }
+            string hint = Editor.getHintforKey(name);
+
             new ToolTip().SetToolTip(llbl, hint);
             new ToolTip().SetToolTip(lbl, hint);
 

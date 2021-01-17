@@ -268,6 +268,16 @@ namespace FOIE
             }
         }
 
+        static public string getHintforKey(string name)
+        {
+            string hint = name + " ";
+            if (hintBook.ContainsKey(name))
+            {
+                hint += "#"+Editor.hintBook[name];
+            }
+            return hint;
+        }
+
         //-------------------------------------------------------------------------------
 
         static public string getSizeFromStringCoords(string str)
