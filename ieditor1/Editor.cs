@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Win32;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
-using System.Windows.Forms;
-using Microsoft.Win32;
 
 
 namespace FOIE
@@ -26,7 +22,7 @@ namespace FOIE
         static public string currentBackground = "";
         static public string fullPath = "";
         static public string iniPath = "";
-        
+
         static public string cfgPath = "default.cfg";   // default name
 
 
@@ -48,7 +44,7 @@ namespace FOIE
                 if (rk == null) return;
 
                 rk.SetValue("ConfigFile", cfgPath);
-                
+
             }
             finally
             {
@@ -62,7 +58,8 @@ namespace FOIE
             try
             {
                 rk = Registry.CurrentUser.OpenSubKey(regKeyName);
-                if (rk != null){
+                if (rk != null)
+                {
                     string val = (string)rk.GetValue("ConfigFile");
                     if (val != "") cfgPath = val;
                 }
@@ -81,7 +78,7 @@ namespace FOIE
         {
             iniArray.Clear();
             string[] lines = System.IO.File.ReadAllLines(@path);
-           
+
             foreach (string line in lines.Reverse())
             //foreach (string line in lines)
             {
@@ -104,22 +101,23 @@ namespace FOIE
                     iniArray[key] = val;
                     //MessageBox.Show(key+val);
                 }
-                
+
             }
 
             //      RESOLUTION BLOCKS
 
             int resBX = 0, resBY = 0;
 
-            foreach (string line in lines.Reverse()) 
+            foreach (string line in lines.Reverse())
             {
                 string l = line.Trim();
                 int indexOfCharSharp = l.IndexOf('#');
                 bool resBlockHeader = l.Contains("resolution");
 
-                if (indexOfCharSharp != 0 && resBlockHeader) {
+                if (indexOfCharSharp != 0 && resBlockHeader)
+                {
 
-                   string[] subs = l.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                    string[] subs = l.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
                     int x = Int32.Parse(subs[1]);
                     if (x > resBX) { resBX = x; }
@@ -128,7 +126,7 @@ namespace FOIE
                     if (y > resBY) { resBY = y; }
                 }
             }
-            
+
             if (resBX > 0 || resBY > 0)
             {
                 foreach (string line in lines.Reverse())
@@ -140,7 +138,7 @@ namespace FOIE
                         if ((l.Contains("resolution") && l.Contains(resBX.ToString()) && l.Contains(resBY.ToString())) || (l.Contains("resolution") && l.Contains(resBX.ToString())))
                         {
                             int index = Array.IndexOf(lines, line);
-                            readResolutionBlock(lines, index+1);
+                            readResolutionBlock(lines, index + 1);
                         }
                     }
                 }
@@ -152,7 +150,7 @@ namespace FOIE
         static public void readResolutionBlock(string[] lines, int index)
         {
             bool breakvar = false;
-            for (int i = index; !breakvar; i++) 
+            for (int i = index; !breakvar; i++)
             {
                 string l = lines[i].Trim();
                 int indexOfCharEquals = l.IndexOf('=');
@@ -172,11 +170,11 @@ namespace FOIE
                     //MessageBox.Show(key+val);
                 }
 
-                if (i+1 == lines.Length)
+                if (i + 1 == lines.Length)
                 {
                     breakvar = true;
-                } 
-                else if (i+1<lines.Length && lines[i + 1].Contains("resolution"))
+                }
+                else if (i + 1 < lines.Length && lines[i + 1].Contains("resolution"))
                 {
                     breakvar = true;
                 }
@@ -220,9 +218,9 @@ namespace FOIE
             string jsonPath = System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             try
             {
-                string jsonString = System.IO.File.ReadAllText(@jsonPath + "\\" +@cfgPath);
+                string jsonString = System.IO.File.ReadAllText(@jsonPath + "\\" + @cfgPath);
                 configJSON = JObject.Parse(jsonString);
-                
+
                 configJsonKeys.Clear();
                 foreach (JProperty property in configJSON.Properties())
                 {
@@ -242,7 +240,7 @@ namespace FOIE
         {
             hintBook.Clear();
             string path = System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-           
+
             try
             {
                 string[] lines = System.IO.File.ReadAllLines(@path + "\\hintbook.ini");
@@ -273,7 +271,7 @@ namespace FOIE
             string hint = name + " ";
             if (hintBook.ContainsKey(name))
             {
-                hint += "#"+Editor.hintBook[name];
+                hint += "#" + Editor.hintBook[name];
             }
             return hint;
         }

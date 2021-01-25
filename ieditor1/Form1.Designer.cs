@@ -47,6 +47,8 @@
             this.toolStripScreen = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip0 = new System.Windows.Forms.MenuStrip();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.devMenuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.test1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip0.SuspendLayout();
             this.panel3.SuspendLayout();
             this.SuspendLayout();
@@ -158,7 +160,8 @@
             // 
             this.menuStrip0.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem1,
-            this.toolStripScreen});
+            this.toolStripScreen,
+            this.devMenuToolStripMenuItem});
             this.menuStrip0.Location = new System.Drawing.Point(0, 0);
             this.menuStrip0.Name = "menuStrip0";
             this.menuStrip0.Size = new System.Drawing.Size(1057, 24);
@@ -178,6 +181,21 @@
             this.panel3.Size = new System.Drawing.Size(6, 426);
             this.panel3.TabIndex = 11;
             this.panel3.Tag = "MainPic Placeholder";
+            // 
+            // devMenuToolStripMenuItem
+            // 
+            this.devMenuToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.test1ToolStripMenuItem});
+            this.devMenuToolStripMenuItem.Name = "devMenuToolStripMenuItem";
+            this.devMenuToolStripMenuItem.Size = new System.Drawing.Size(73, 20);
+            this.devMenuToolStripMenuItem.Text = "Dev menu";
+            // 
+            // test1ToolStripMenuItem
+            // 
+            this.test1ToolStripMenuItem.Name = "test1ToolStripMenuItem";
+            this.test1ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.test1ToolStripMenuItem.Text = "test1";
+            this.test1ToolStripMenuItem.Click += new System.EventHandler(this.test1ToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -219,6 +237,8 @@
         private System.Windows.Forms.MenuStrip menuStrip0;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem devMenuToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem test1ToolStripMenuItem;
     }
 }
 

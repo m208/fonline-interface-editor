@@ -1,12 +1,12 @@
-﻿using System;
+﻿using FOIE;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using System.IO;
-using Newtonsoft.Json.Linq;
-using FOIE;
 
 namespace ieditor1
 {
@@ -29,7 +29,8 @@ namespace ieditor1
             {
                 generateStripMenu();
                 //openDefault();
-            } else
+            }
+            else
             {
                 MessageBox.Show("Error reading config file");
                 openSettingsForm();
@@ -57,37 +58,32 @@ namespace ieditor1
             ToolStripMenuItem item = sender as ToolStripMenuItem;
             string name = item.Name.Substring("upMenu".Length);
             drawDefault(name);
-            
+
         }
-
-        //private void openDefault()
-        //{
-        //    Editor.fullPath = "F:\\FOnline2S3en\\data\\art\\intrface\\";
-        //    Editor.iniRead(Editor.fullPath + "default.ini");
-        //    drawDefault("Inventory");
-        //    Editor.iniPath = Editor.fullPath + "default.ini";
-        //    this.Text = Editor.fullPath;
-        //}
-
-
-        //System.Media.SystemSounds.Beep.Play();
 
 
         //  --------------  ADD MAIN PIC    --------------
 
-        private Bitmap LoadBitmapUnlocked(string file_name)
+        private Bitmap LoadBitmapUnlocked(string path)
         {
-            using (Bitmap bm = new Bitmap(file_name))
+            using (Bitmap bm = new Bitmap(path))
             {
                 return new Bitmap(bm);
             }
+        }
+
+        private string getFileExtension(string name)
+        {
+            name = name.Trim();
+            string ext = name.Substring(name.IndexOf("."));
+            return ext.ToLower();
         }
 
         private void addMainPic(string name, string bgImage)
         {
             string areaValue = "0 0 0 0";
             string picName = "";
-            
+
             Bitmap img;
 
             Size pSize = new Size(0, 0);
@@ -103,10 +99,21 @@ namespace ieditor1
             string path = (Editor.fullPath + picName);
 
             bool imgExist = true;
+
             try
             {
-                img = LoadBitmapUnlocked(@path);
-                pSize = new Size(img.Width, img.Height);
+                if (getFileExtension(picName) == ".frm")
+                {
+                    Frm frmImg = new Frm(@path);
+                    img = frmImg.bitmaps[0];
+                    pSize = new Size(frmImg.bitmaps[0].Width, frmImg.bitmaps[0].Height);
+                    //MessageBox.Show("frm");
+                }
+                else
+                {
+                    img = LoadBitmapUnlocked(@path);
+                    pSize = new Size(img.Width, img.Height);
+                }
             }
             catch
             {
@@ -119,7 +126,7 @@ namespace ieditor1
             if (Editor.iniArray.ContainsKey(name))
             {
                 areaValue = Editor.iniArray[name];
-                
+
                 int[] coords = Editor.stringToRectArray(areaValue);
                 if (isValidRect(coords))
                 {
@@ -128,11 +135,10 @@ namespace ieditor1
             }
 
             if (name == "0")
-            //if (name == "" || name == null)
             {
-                if (imgExist)   cSize = pSize;
-                else            cSize = new Size(0, 0);
-            } 
+                if (imgExist) cSize = pSize;
+                else cSize = new Size(0, 0);
+            }
 
             var picture = new PictureBox
             {
@@ -149,7 +155,7 @@ namespace ieditor1
 
             string areaSize = Editor.getSizeFromStringCoords(areaValue);
             string imgSize = pSize.Width + "x" + pSize.Height;
-            
+
             addTxtControlsLine(name, name, false, false, areaValue, areaSize, false, "Area", true);
 
             addTxtControlsLine(name, bgImage, false, false, picName, imgSize, true, "Picture", imgExist);
@@ -206,12 +212,12 @@ namespace ieditor1
             picBox.LocationChanged += new System.EventHandler(this.pictureBox1_LocationChanged);
             picBox.SizeChanged += new System.EventHandler(this.pictureBox1_LocationChanged);
             // picBox.MouseDown += (sender, e) => picBox.BringToFront();
-           
+
             picBox.MouseDown += (sender, e) => picBoxClickHighlight(picBox, e);
             picBox.MouseUp += (sender, e) => picBoxClickHighlightOff(picBox, e);
 
             ControlMoverOrResizer.Init(picBox);
- 
+
             string areaSize = Editor.getSizeFromStringCoords(value);
 
             addTxtControlsLine(null, name, true, true, value, areaSize, false, "Area", true);
@@ -227,7 +233,7 @@ namespace ieditor1
             {
                 value = Editor.iniArray[name];
             }
-                addTxtControlsLine(null, name, false, false, value, "", false, "Custom", true);
+            addTxtControlsLine(null, name, false, false, value, "", false, "Custom", true);
 
         }
 
@@ -278,7 +284,7 @@ namespace ieditor1
 
             ControlMoverOrResizer.Init(picBox);
 
-            
+
             string imgSize = cSize.Width + "x" + cSize.Height;
 
 
@@ -293,23 +299,31 @@ namespace ieditor1
 
 
                 string path = Editor.fullPath + value;
-                try
+
+                if (isFileExist(@path))
                 {
-                    //img = new Bitmap(@path);
-                    img = LoadBitmapUnlocked(@path);
+                    if (getFileExtension(path) == ".frm")
+                    {
+                        Frm frmImg = new Frm(path);
+                        img = frmImg.bitmaps[0];
+                    }
+                    else
+                    {
+                        img = LoadBitmapUnlocked(path);
+                    }
                     cSize = new Size(img.Width, img.Height);
                     picSize = cSize.Width + "x" + cSize.Height;
-                    
                 }
-                catch
+                else
                 {
                     img = new Bitmap(FOIE.Properties.Resources.nofile1);
                     picSize = "error";
                     picExist = false;
                 }
+
                 addTxtControlsLine(line[0], line[i], false, false, value, picSize, true, "Picture", picExist);
             }
-            
+
         }
         //------------------------------------------------------------------------------------------------
 
@@ -320,7 +334,7 @@ namespace ieditor1
             p.BringToFront();
             p.BackColor = Color.Violet;
 
-            Button zb = this.Controls.Find("zBttn"+name, true).FirstOrDefault() as Button;
+            Button zb = this.Controls.Find("zBttn" + name, true).FirstOrDefault() as Button;
             zb.Tag = "Up";
 
             //changeZLayer(zb, e);
@@ -393,7 +407,7 @@ namespace ieditor1
         {
             tableRowTag tableRowTag = new tableRowTag();
             tableRowTag.Set("Group", parentName);
-            
+
 
             var pnl = new Panel
             {
@@ -404,24 +418,24 @@ namespace ieditor1
             };
 
             panel2.Controls.Add(pnl);
-            
+
 
             var llbl = new LinkLabel
-                {
-                    Name = "lbl" + name,
-                    Size = new Size(150, 25),
-                    Location = new Point(5, 0),
-                    Text = name,
-                    //LinkColor = Color.Black,
-                };
-           
-                var lbl = new Label
-                {
-                    Name = "lbl" + name,
-                    Size = new Size(150, 25),
-                    Location = new Point(5, 0),
-                    Text = name,
-                };
+            {
+                Name = "lbl" + name,
+                Size = new Size(150, 25),
+                Location = new Point(5, 0),
+                Text = name,
+                //LinkColor = Color.Black,
+            };
+
+            var lbl = new Label
+            {
+                Name = "lbl" + name,
+                Size = new Size(150, 25),
+                Location = new Point(5, 0),
+                Text = name,
+            };
 
             // tool tips from dictionary
             string hint = Editor.getHintforKey(name);
@@ -434,13 +448,13 @@ namespace ieditor1
             object img = FOIE.Properties.Resources.ResourceManager.GetObject(imgSrc);
 
             var pb = new PictureBox
-                {
-                    Name = "typePic" + name,
-                    Size = new Size(20, 20),
-                    Location = new Point(175, 0),
-                    Image = (Image) img,
-                    BackgroundImageLayout = ImageLayout.Stretch,
-                    Tag = controlType,
+            {
+                Name = "typePic" + name,
+                Size = new Size(20, 20),
+                Location = new Point(175, 0),
+                Image = (Image)img,
+                BackgroundImageLayout = ImageLayout.Stretch,
+                Tag = controlType,
             };
 
             var tb1 = new TextBox
@@ -464,8 +478,8 @@ namespace ieditor1
 
             new ToolTip().SetToolTip(pb, controlType);
 
-            
-            Panel p = panel2.Controls.Find("panel"+ name, true).FirstOrDefault() as Panel;
+
+            Panel p = panel2.Controls.Find("panel" + name, true).FirstOrDefault() as Panel;
 
             p.Controls.Add(tb1);
             p.Controls.Add(tb2);
@@ -545,12 +559,12 @@ namespace ieditor1
                 l.MouseUp += (sender, e) => panelClickHighlightOff(l, e);
             }
             else p.Controls.Add(lbl);
-            
+
             Editor.lineCounter++;
         }
 
 
-//--------------------------------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------------------------------
 
         private void changeZLayer(object sender, EventArgs e)
         {
@@ -570,7 +584,7 @@ namespace ieditor1
 
         }
 
-        
+
 
         private void showHideArea(object sender, EventArgs e)
         {
@@ -588,7 +602,7 @@ namespace ieditor1
                 ((Control)sender).BackgroundImage = (Image)(FOIE.Properties.Resources.eye);
                 ((Control)sender).Tag = "Show";
                 p.Visible = true;
-               // p.BringToFront();
+                // p.BringToFront();
             }
 
         }
@@ -598,10 +612,10 @@ namespace ieditor1
         private void showHideImg(object sender, EventArgs e)
         {
             CheckBox cb = (Control)sender as CheckBox;
-            if(cb.Checked) return;
+            if (cb.Checked) return;
 
             // else
-            
+
             var allCBoxes = GetAll(this, typeof(CheckBox));
 
             string currentGroup = (string)cb.Tag;
@@ -614,8 +628,8 @@ namespace ieditor1
                     c.Checked = false;
                 }
             }
-                cb.Checked = true;
-                setImage(currentGroup, currentItem.Substring("cb".Length)); // substring = crop "cb"
+            cb.Checked = true;
+            setImage(currentGroup, currentItem.Substring("cb".Length)); // substring = crop "cb"
         }
 
         //------------------------------------------------------
@@ -634,38 +648,20 @@ namespace ieditor1
                 CheckBox cb = this.Controls.Find("cb" + currentItem, true).FirstOrDefault() as CheckBox;
 
 
-                if (currentItem == Editor.currentBackground)
+
+                readImageStats(currentItem);
+
+                if (cb.Checked)
                 {
-
-                    PictureBox pb = panel1.Controls.Find(currentItem, true).FirstOrDefault() as PictureBox;
-                    
-                    try
-                    {
-                        pb.Image = new Bitmap(@newPic);
-                    }
-                    catch
-                    {
-                        pb.Image = null;
-                    }
-
-
+                    string currentGroup = (string)cb.Tag;
+                    setImage(currentGroup, currentItem);
                 }
-                else
-                {
 
-                    readImageStats(currentItem);
 
-                    if (cb.Checked)
-                    {
-                        string currentGroup = (string)cb.Tag;
-                        setImage(currentGroup, currentItem);
-                    }
-                }
-                
             }
         }
 
-       //------------------------------------------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------------------------------------------
 
         private void saveIniToFile()
         {
@@ -728,7 +724,7 @@ namespace ieditor1
                                         file.WriteLine(n + " = " + Editor.iniArray[n]);
                                         unassignedKeys.Remove(n);
                                     }
-                                 }
+                                }
                             }
                             else
                             {
@@ -789,7 +785,7 @@ namespace ieditor1
         private string getFileName(string Filter, bool sameFolderRequired)
         {
             openFileDialog1.InitialDirectory = Editor.fullPath;
-            openFileDialog1.Filter = Filter; 
+            openFileDialog1.Filter = Filter;
 
             if (openFileDialog1.ShowDialog() == DialogResult.Cancel)
             {
@@ -797,7 +793,8 @@ namespace ieditor1
             }
             else
             {
-                if (sameFolderRequired) { 
+                if (sameFolderRequired)
+                {
                     while (!openFileDialog1.FileName.Contains(openFileDialog1.InitialDirectory))
                     {
                         MessageBox.Show("Please select file which is in the default folder", "Wrong folder", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -820,7 +817,7 @@ namespace ieditor1
             {
                 var bG = Editor.configJSON[item]["Main"] as JArray;
 
-                if(bG.Count > 0)
+                if (bG.Count > 0)
                 {
                     string mainImg = (string)bG[0].ToObject(typeof(string));
                     string mainBg = (string)bG[1].ToObject(typeof(string));
@@ -842,27 +839,27 @@ namespace ieditor1
                     if (i.GetType().Name == "JArray")
                     {
                         string[] array = (string[])i.ToObject(typeof(string[]));
-                            addBttnControl(array);
+                        addBttnControl(array);
                     }
                     else
                     {
                         string name = (string)i.ToObject(typeof(string));
-                            addGameControl(name);
+                        addGameControl(name);
                     }
                 }
             }
-           
+
 
             var CustomFields = Editor.configJSON[item]["Custom"] as JArray;
-                foreach (var i in CustomFields)
-                {
-                    string name = (string)i.ToObject(typeof(string));
-                        addCustomField(name);
-                }
+            foreach (var i in CustomFields)
+            {
+                string name = (string)i.ToObject(typeof(string));
+                addCustomField(name);
+            }
 
-                colorizeRows();
-                setPicsforControls();
-                this.panel2.Visible = true;
+            colorizeRows();
+            setPicsforControls();
+            this.panel2.Visible = true;
 
         }
 
@@ -882,9 +879,10 @@ namespace ieditor1
                 {
                     tableRowTag tableRowTag = (tableRowTag)(((Panel)i).Tag);
                     string currentGroup = (string)(tableRowTag.Get("Group"));       //reassign
-     
 
-                    if (currentGroup != lastGroup || currentGroup == null)  {
+
+                    if (currentGroup != lastGroup || currentGroup == null)
+                    {
                         switchColor = !switchColor;
                     }
                     lastGroup = currentGroup;
@@ -895,7 +893,7 @@ namespace ieditor1
                     tableRowTag newTag = new tableRowTag();
                     newTag.Set("BgColor", currntColor);
                     newTag.Set("Group", currentGroup);           //reassign
-                    
+
                     ((Panel)i).Tag = newTag;
                 }
             }
@@ -911,7 +909,7 @@ namespace ieditor1
                                       .Concat(controls)
                                       .Where(c => c.GetType() == type);
         }
-    
+
         //-----------------------------------------------------------------------
 
         private void setPicsforControls()
@@ -919,7 +917,7 @@ namespace ieditor1
             var allCBoxes = GetAll(this, typeof(CheckBox));
             string currentItem;
             string lastGroup = "";
-            foreach (CheckBox c in allCBoxes) 
+            foreach (CheckBox c in allCBoxes)
             {
                 string currentGroup = (string)c.Tag;
 
@@ -927,11 +925,16 @@ namespace ieditor1
                 {
                     c.Checked = true;
                     lastGroup = currentGroup;
-                    
+
                     currentItem = c.Name.Substring("cb".Length); //crop "cb"
                     setImage(currentGroup, currentItem);
                 }
             }
+        }
+
+        private bool isFileExist(string path)
+        {
+            return File.Exists(path);
         }
 
         private void setImage(string areaName, string itemName)
@@ -941,18 +944,25 @@ namespace ieditor1
 
             string path = Editor.fullPath + tb.Text;
 
-            try
+            if (isFileExist(@path))
             {
-                //Bitmap img = new Bitmap(@path);
-                Bitmap img = LoadBitmapUnlocked(@path);
-                pb.Image = img;
+                if (getFileExtension(tb.Text) == ".frm")
+                {
+                    Frm frmImg = new Frm(path);
+                    pb.Image = frmImg.bitmaps[0];
+                }
+                else
+                {
+                    Bitmap img = LoadBitmapUnlocked(path);
+                    pb.Image = img;
+
+                }
             }
-            catch
+            else
             {
                 pb.Image = null;
             }
 
-            
         }
         //------------------------------------------------------------------------
         private void setImageUpdateStatus(string itemName, bool success)
@@ -978,18 +988,25 @@ namespace ieditor1
             string newSize = "error";
             string imgSrc = Editor.controlTypesResources["error"];
 
-            try
+            if (isFileExist(@path))
             {
-                //Bitmap img = new Bitmap(@path);
-                Bitmap img = LoadBitmapUnlocked(@path);
+                Bitmap img;
+                if (getFileExtension(path) == ".frm")
+                {
+                    Frm frmImg = new Frm(path);
+                    img = frmImg.bitmaps[0];
+                }
+                else
+                {
+                    img = LoadBitmapUnlocked(path);
+                }
+
                 newSize = img.Width + "x" + img.Height;
                 imgSrc = Editor.controlTypesResources[controlType];
                 //Update Array data
                 Editor.iniArray[itemName] = tb.Text;
             }
-            catch
-            {              
-            }
+
 
             object imgOk = FOIE.Properties.Resources.ResourceManager.GetObject(imgSrc);
             pb.Image = (Image)imgOk;
@@ -1019,8 +1036,8 @@ namespace ieditor1
 
                 if (coords != null && isValidRect(coords))
                 {
-                        changeArea(name, coords);
-                        setImageUpdateStatus(name, true);
+                    changeArea(name, coords);
+                    setImageUpdateStatus(name, true);
                 }
                 else
                 {
@@ -1029,7 +1046,8 @@ namespace ieditor1
                     stb.Text = "Error!";
                 }
 
-            } else if (type == "Custom")
+            }
+            else if (type == "Custom")
             {
                 // Update Array data
                 // nothing more
@@ -1101,7 +1119,7 @@ namespace ieditor1
         {
             openProject();
         }
-            
+
         private void refreshJSONToolStripMenuItem_Click(object sender, EventArgs e)
         {
             refreshJSON();
@@ -1127,8 +1145,17 @@ namespace ieditor1
             openSettingsForm();
         }
 
+        private void test1ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+        //    Editor.fullPath = "F:\\FOIE\\defFO2intrface\\";
+        //    Editor.iniArray["LogMainPic"] = "wp_x.png";
+        //    Editor.iniArray["LogMain"] = "0 0 800 600";
 
+        //    AppControl test1 = new AppControl("LogMain", "LogMainPic");
+        //    panel1.Controls.Add(test1.picBox);
+        //    MessageBox.Show(test1.controlImageValue);
 
+        }
     }
 }
 

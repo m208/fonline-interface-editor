@@ -1,12 +1,11 @@
-﻿using FOIE;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace ieditor1
+namespace FOIE
 {
     internal class ControlMoverOrResizer
     {
@@ -212,14 +211,14 @@ namespace ieditor1
                     {
                         y = 0;
                     }
-                    if (x + control.Width > Editor.mainImageWidth  )
+                    if (x + control.Width > Editor.mainImageWidth)
                     {
-                       // x = Editor.mainImageWidth - control.Width;
-                        
+                        // x = Editor.mainImageWidth - control.Width;
+
                     }
                     if (y + control.Height > Editor.mainImageHeight)
                     {
-                       // y = Editor.mainImageHeight - control.Height;
+                        // y = Editor.mainImageHeight - control.Height;
                     }
 
                     control.Location = new Point(x, y);
@@ -300,7 +299,7 @@ namespace ieditor1
                     control.Height = int.Parse(properties[3]);
                 }
             }
-            
+
         }
 
         #endregion
