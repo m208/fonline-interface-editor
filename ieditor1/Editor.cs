@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using FOIE.TableLines;
+using Microsoft.Win32;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -11,9 +12,13 @@ namespace FOIE
     class Editor
     {
 
+
+        static public List<TableLine> tableRows = new List<TableLine>();
+
         static public Dictionary<string, string> controlTypesResources = new Dictionary<string, string>
         {
             ["Area"] = "icon_hatch",
+            ["AreaMain"] = "icon_hatch",
             ["Picture"] = "icon_image",
             ["Custom"] = "typography",
             ["error"] = "icon_error",
@@ -289,8 +294,17 @@ namespace FOIE
         {
             return (a & 1) == 0;
         }
+
+
+        public static void txtBoxIsUpdated(string name, string type)
+        {
+            
+        }
+
+
     }
 
+    //-------------------------------------------------------------------
 
     public class tableRowTag
     {
@@ -315,7 +329,17 @@ namespace FOIE
             else return "empty";
 
         }
+
+
+
+
+
+
     }
+
+
+
+
 
 
 }

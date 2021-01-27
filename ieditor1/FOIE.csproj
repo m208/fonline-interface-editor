@@ -100,16 +100,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\ControlArea.cs" />
+    <Compile Include="Controls\ControlButton.cs" />
+    <Compile Include="Controls\ControlMain.cs" />
+    <Compile Include="Controls\PicBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Editor.cs" />
-    <Compile Include="ControlMoverOrResizer.cs" />
+    <Compile Include="Controls\ControlMoverOrResizer.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmPalette.cs" />
-    <Compile Include="FrmReader.cs" />
+    <Compile Include="Frm\FrmPalette.cs" />
+    <Compile Include="Frm\FrmReader.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SettingsForm.cs">
@@ -118,6 +124,9 @@
     <Compile Include="SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="TableLines\TableLine.cs" />
+    <Compile Include="TableLines\TableLineArea.cs" />
+    <Compile Include="TableLines\TableLinePicture.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -176,6 +185,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.4.2.1\build\Fody.targets" Condition="Exists('..\packages\Fody.4.2.1\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

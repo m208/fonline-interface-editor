@@ -46,9 +46,10 @@
             this.toolSt2222 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripScreen = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip0 = new System.Windows.Forms.MenuStrip();
-            this.panel3 = new System.Windows.Forms.Panel();
             this.devMenuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.test1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.test2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip0.SuspendLayout();
             this.panel3.SuspendLayout();
             this.SuspendLayout();
@@ -168,6 +169,22 @@
             this.menuStrip0.TabIndex = 10;
             this.menuStrip0.Text = "menuStrip1";
             // 
+            // devMenuToolStripMenuItem
+            // 
+            this.devMenuToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.test1ToolStripMenuItem,
+            this.test2ToolStripMenuItem});
+            this.devMenuToolStripMenuItem.Name = "devMenuToolStripMenuItem";
+            this.devMenuToolStripMenuItem.Size = new System.Drawing.Size(73, 20);
+            this.devMenuToolStripMenuItem.Text = "Dev menu";
+            // 
+            // test1ToolStripMenuItem
+            // 
+            this.test1ToolStripMenuItem.Name = "test1ToolStripMenuItem";
+            this.test1ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.test1ToolStripMenuItem.Text = "test1";
+            this.test1ToolStripMenuItem.Click += new System.EventHandler(this.test1ToolStripMenuItem_Click);
+            // 
             // panel3
             // 
             this.panel3.AutoScroll = true;
@@ -182,20 +199,12 @@
             this.panel3.TabIndex = 11;
             this.panel3.Tag = "MainPic Placeholder";
             // 
-            // devMenuToolStripMenuItem
+            // test2ToolStripMenuItem
             // 
-            this.devMenuToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.test1ToolStripMenuItem});
-            this.devMenuToolStripMenuItem.Name = "devMenuToolStripMenuItem";
-            this.devMenuToolStripMenuItem.Size = new System.Drawing.Size(73, 20);
-            this.devMenuToolStripMenuItem.Text = "Dev menu";
-            // 
-            // test1ToolStripMenuItem
-            // 
-            this.test1ToolStripMenuItem.Name = "test1ToolStripMenuItem";
-            this.test1ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.test1ToolStripMenuItem.Text = "test1";
-            this.test1ToolStripMenuItem.Click += new System.EventHandler(this.test1ToolStripMenuItem_Click);
+            this.test2ToolStripMenuItem.Name = "test2ToolStripMenuItem";
+            this.test2ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.test2ToolStripMenuItem.Text = "test2";
+            this.test2ToolStripMenuItem.Click += new System.EventHandler(this.test2ToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -239,6 +248,7 @@
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem devMenuToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem test1ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem test2ToolStripMenuItem;
     }
 }
 

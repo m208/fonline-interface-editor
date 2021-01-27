@@ -1,4 +1,5 @@
 ﻿using FOIE;
+using FOIE.TableLines;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace ieditor1
     public partial class Form1 : Form
     {
 
-        public Form1()
+        public  Form1()
         {
             InitializeComponent();
         }
@@ -57,8 +58,8 @@ namespace ieditor1
         {
             ToolStripMenuItem item = sender as ToolStripMenuItem;
             string name = item.Name.Substring("upMenu".Length);
-            drawDefault(name);
-
+            //drawDefault(name);
+            drawDefault2(name);
         }
 
 
@@ -207,6 +208,7 @@ namespace ieditor1
             new ToolTip().SetToolTip(picture, hint);
 
             bgImg.Controls.Add(picture);
+           
             PictureBox picBox = this.Controls.Find(name, true).FirstOrDefault() as PictureBox;
             picBox.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
             picBox.LocationChanged += new System.EventHandler(this.pictureBox1_LocationChanged);
@@ -771,7 +773,8 @@ namespace ieditor1
                 Editor.iniPath = newIni;
 
                 Editor.iniRead(newIni);
-                drawDefault(Editor.configJsonKeys[0]);
+                //drawDefault(Editor.configJsonKeys[0]);
+                drawDefault2(Editor.configJsonKeys[0]);
 
                 this.Text = newIni;
 
@@ -1078,6 +1081,7 @@ namespace ieditor1
         private void clearGui()
         {
             Editor.lineCounter = 0;
+            Editor.tableRows.Clear();
             panel1.Controls.Clear();
             panel2.Controls.Clear();
 
@@ -1092,7 +1096,8 @@ namespace ieditor1
         {
             Editor.WriteParam();
             refreshJSON();
-            drawDefault(Editor.configJsonKeys[0]);
+            //drawDefault(Editor.configJsonKeys[0]);
+            drawDefault2(Editor.configJsonKeys[0]);
         }
 
 
@@ -1147,15 +1152,191 @@ namespace ieditor1
 
         private void test1ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-        //    Editor.fullPath = "F:\\FOIE\\defFO2intrface\\";
-        //    Editor.iniArray["LogMainPic"] = "wp_x.png";
-        //    Editor.iniArray["LogMain"] = "0 0 800 600";
+           //     Editor.fullPath = "F:\\FOIE\\defFO2intrface\\";
+           //     Editor.iniArray["LogMainPic"] = "wp_x.png";
+           //     Editor.iniArray["LogMain"] = "0 0 800 600";
 
-        //    AppControl test1 = new AppControl("LogMain", "LogMainPic");
-        //    panel1.Controls.Add(test1.picBox);
-        //    MessageBox.Show(test1.controlImageValue);
+           
+
+           // AddControlMain test1 = new AddControlMain("LogMain", "LogMainPic");
+           // //panel1.Controls.Add(test1.picBox);
+
+
+           // Editor.iniArray["LogName"] = "70 173 208 193";
+
+
+           // string[] array = { "LogPlay", "LogPlayPicDn" };
+           // Editor.iniArray["LogPlay"] = "70 273 208 293";
+           // Editor.iniArray["LogPlayPicDn"] = "menu_x.png";
+
+           // AddControlArea area1 = new AddControlArea("LogName");
+           // panel1.Controls.Add(area1.picBox);
+
+           //// AddControlArea area2 = new AddControlArea(array);
+           //// panel1.Controls.Add(area2.picBox);
+
+
+
+           // Editor.lineCounter = 0;
+           // ControlTableRow line = new ControlTableRow(test1.controlInfo[0]);
+           // ControlTableRow line2 = new ControlTableRow(area1.controlInfo[0]);
+
+            
+            
+            
+           // line.Panel.Location = new Point(0, 25 * Editor.lineCounter);
+           // panel2.Controls.Add(line.Panel);
+
+           // Editor.lineCounter++;
+
+           // line2.Panel.Location = new Point(0, 25 * Editor.lineCounter);
+           // panel2.Controls.Add(line2.Panel);
+
+
+            //    MessageBox.Show(test1.controlImageValue);
 
         }
+
+        private void test2ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string newIni = "F:\\FOIE\\defFO2intrface\\01.ini";
+            string directoryName = Path.GetDirectoryName(newIni);
+            Editor.fullPath = directoryName + "\\";
+            Editor.iniPath = newIni;
+
+            Editor.iniRead(newIni);
+            drawDefault2(Editor.configJsonKeys[1]);
+        }
+
+
+
+        //------------------------------------------------------------------
+
+        private void drawDefault2(string item)
+        {
+            clearGui();
+            panel2.Visible = false;
+
+
+            if (Editor.configJSON[item]["Main"] != null)
+            {
+                var bG = Editor.configJSON[item]["Main"] as JArray;
+
+                if (bG.Count > 0)
+                {
+                    string mainImg = (string)bG[0].ToObject(typeof(string));
+                    string mainBg = (string)bG[1].ToObject(typeof(string));
+
+                    Editor.currentBackground = mainImg;
+
+                    AddControlMain main = new AddControlMain(mainImg, mainBg, this);
+                    panel1.Controls.Add(main.picBox);
+
+
+                    var line = new TableLine(main.controlInfo[0]);
+                    Editor.tableRows.Add(line);
+                    line = new TableLinePicture(main.controlInfo[1]);
+                    Editor.tableRows.Add(line);
+
+
+                }
+            }
+
+            
+            PictureBox bgImg = panel1.Controls.Find(Editor.currentBackground, true).FirstOrDefault() as PictureBox;
+
+            if (Editor.configJSON[item]["Controls"] != null)
+            {
+                var Controls = Editor.configJSON[item]["Controls"] as JArray;
+
+                foreach (var i in Controls)
+                {
+                    if (i.GetType().Name == "JArray")
+                    {
+                        string[] array = (string[])i.ToObject(typeof(string[]));
+                        AddControlButton area = new AddControlButton(array, this);
+                        bgImg.Controls.Add(area.picBox);
+
+
+                        TableLineArea line = new TableLineArea(area.controlInfo[0]);
+                        Editor.tableRows.Add(line);
+                        for (int k = 1; k < area.controlInfo.Count; k++)
+                        {
+                            TableLinePicture picLine = new TableLinePicture(area.controlInfo[k]);
+                            Editor.tableRows.Add(picLine);
+                        }
+
+
+                    }
+                    else
+                    {
+                        string name = (string)i.ToObject(typeof(string));
+                        AddControlArea area = new AddControlArea(name, this);
+                        bgImg.Controls.Add(area.picBox);
+
+                        foreach (ControlInfo element in area.controlInfo)
+                        {
+                            TableLineArea line = new TableLineArea(element);
+                            Editor.tableRows.Add(line);
+                        }
+                    }
+                }
+            }
+
+            
+
+            //var CustomFields = Editor.configJSON[item]["Custom"] as JArray;
+            //foreach (var i in CustomFields)
+            //{
+            //    string name = (string)i.ToObject(typeof(string));
+            //    addCustomField(name);
+            //}
+
+         //   colorizeRows();
+         //   setPicsforControls();
+            
+            drawTable();
+
+            panel2.Visible = true;
+
+            setEventHandlers();
+        }
+
+        private void drawTable()
+        {
+            panel2.SuspendLayout();
+
+
+
+            foreach (TableLine line in Editor.tableRows)
+            {
+                line.Panel.Location = new Point(0, 25 * Editor.lineCounter);
+                panel2.Controls.Add(line.Panel);
+                Editor.lineCounter++;
+            }
+            panel2.ResumeLayout(false);
+
+        }
+
+        private void setEventHandlers()
+        {
+            foreach (TextBox t in Controls.OfType<TextBox>()){
+
+            }
+        }
+
+        //-------------------------------------------------------------------
+
+        public void txtBoxIsUpdated(string name, string type)
+        {
+            TextBox tb = this.Controls.Find("tb" + name, true).FirstOrDefault() as TextBox;
+            Color myRgbColor = new Color();
+            myRgbColor = Color.FromArgb(0, 255, 0);
+            tb.BackColor = myRgbColor;
+            ////CheckBox cb = this.Controls.Find("cb" + name, true).FirstOrDefault() as CheckBox;
+        }
+
+
     }
 }
 
