@@ -7,7 +7,7 @@ namespace FOIE.TableLines
 {
     public class TableLine
     {
-        public Form1 parentForm;
+
         public Panel Panel = new Panel();
         public ControlInfo cInfo;
         public string controlTypeImg = "icon_hatch";        // area by default area
@@ -22,7 +22,7 @@ namespace FOIE.TableLines
 
         public void createTableLine()
         {
-            parentForm = cInfo.parentForm;
+
             Panel = new Panel
             {
                 Name = "panel" + cInfo.name,
@@ -71,7 +71,7 @@ namespace FOIE.TableLines
                 Location = new Point(175, 0),
                 Image = (Image)img,
                 BackgroundImageLayout = ImageLayout.Stretch,
-                //Tag = controlType,
+                Tag = cInfo.clType,
             };
 
             Panel.Controls.Add(pb);
@@ -84,9 +84,8 @@ namespace FOIE.TableLines
                 Size = new Size(100, 25),
                 Location = new Point(200, 0),
                 Text = cInfo.textValue,
-                //Tag = controlType,
+                Tag = cInfo.clType,
             };
-            tb1.TextChanged += (sender, e) => { updateTxtBox(tb1, e); };
 
             TextBox tb2 = new TextBox
             {
@@ -101,14 +100,7 @@ namespace FOIE.TableLines
             Panel.Controls.Add(tb2);
 
         }
-        private void updateTxtBox(object sender, EventArgs e)
-        {
-            string name = ((Control)sender).Name.Substring("tb".Length);
-            //string type = (string)((Control)sender).Tag;
 
-            parentForm.txtBoxIsUpdated(name, "0");
-            //PicBox cb = this.Controls.Find( name, true).FirstOrDefault() as PicBox;
-        }
 
     }
 }

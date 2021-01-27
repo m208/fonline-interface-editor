@@ -1,14 +1,11 @@
-﻿using FOIE.TableLines;
-using System.Drawing;
+﻿using FOIE.Controls;
+using FOIE.TableLines;
 using System.Windows.Forms;
-using System.IO;
-using System.Linq;
 
 namespace FOIE
 {
     class TableLinePicture : TableLine
     {
-
         public TableLinePicture(ControlInfo _cInfo)
         {
             cInfo = _cInfo;
@@ -16,34 +13,16 @@ namespace FOIE
 
             createTableLine();
 
-            bool checkedBox = _cInfo.picIndex == 0;
-            var CheckBox = new CheckBox
+            var CheckBox = new CheckBoxImageSwitch
             {
                 Name = "cb" + cInfo.name,
-                Size = new Size(20, 20),
-                Location = new Point(155, 0),
-                Checked = checkedBox,
-                AutoCheck = false,
-                //Tag = parentName,
+                Checked = (_cInfo.picIndex == 0),   // bool checkedBox = _cInfo.picIndex == 0;
+                Tag = cInfo.parentName,
             };
-
-            //CheckBox.Click += (sender, e) => { showHideImg(CheckBox, e); };
             Panel.Controls.Add(CheckBox);
 
-            var openBttn = new Button
-            {
-                Name = "open" + cInfo.name,
-                Size = new Size(20, 20),
-                Location = new Point(370, 0),
-                BackgroundImage = (Image)(FOIE.Properties.Resources.folder1),
-                BackgroundImageLayout = ImageLayout.Zoom,
-            };
-
-            //openBttn.Click += (sender, e) => { changeImg(openBttn, e); };
+            var openBttn = new ButtonToOpen("open" + cInfo.name);
             Panel.Controls.Add(openBttn);
-
-
         }
-
     }
 }

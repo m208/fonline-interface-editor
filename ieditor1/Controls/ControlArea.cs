@@ -11,14 +11,14 @@ namespace FOIE
         //public Form1 parentForm;
         public AddControlArea() { }
 
-        public AddControlArea(string name, Form1 parentForm)
+        public AddControlArea(string name)
         {
-            generateControl(name, parentForm);
+            generateControl(name);
         }
 
-        public void generateControl(string name, Form1 parentForm)
+        public void generateControl(string name)
         {
-            this.parentForm = parentForm;
+
             string value = "0 0 0 0";
             if (Editor.iniArray.ContainsKey(name))
             {
@@ -69,7 +69,6 @@ namespace FOIE
                 clType = "Area",
                 textValue = value,
                 textInfo = Editor.getSizeFromStringCoords(value),
-                parentForm = parentForm,
             };
             controlInfo.Add(cInfo);
 

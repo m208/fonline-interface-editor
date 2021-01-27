@@ -10,7 +10,7 @@ namespace FOIE
 {
     public class AddControlMain
     {
-        public Form1 parentForm;
+
         public PicBox picBox;
 
         public List<ControlInfo> controlInfo = new List<ControlInfo>();
@@ -23,9 +23,9 @@ namespace FOIE
 
         public AddControlMain() { }
 
-        public AddControlMain(string rectName, string imgName, Form1 parent)
+        public AddControlMain(string rectName, string imgName)
         {
-            parentForm = parent;
+            
             string controlImageValue = "";
             string controlRectValue  = "0 0 0 0";
             Size picSize = new Size(0, 0);
@@ -84,9 +84,12 @@ namespace FOIE
             string hint = Editor.getHintforKey(rectName);
             new ToolTip().SetToolTip(picBox, hint);
 
-            picBox.LocationChanged += new EventHandler(picBox_Changed);
-            picBox.SizeChanged += new EventHandler(picBox_Changed);
+            //picBox.LocationChanged += new EventHandler(picBox_Changed);
+            //picBox.SizeChanged += new EventHandler(picBox_Changed);
             picBox.Paint += new PaintEventHandler(picBox_Paint);
+
+           // picBox.MouseDown += (sender, e) => picBoxClickHighlight(picBox, e);
+           // picBox.MouseUp += (sender, e) => picBoxClickHighlightOff(picBox, e);
 
             ControlMoverOrResizer.Init(picBox);
 
@@ -97,7 +100,7 @@ namespace FOIE
                 clType = "AreaMain",
                 textValue = controlRectValue,
                 textInfo = controlSize.Width + "x" + controlSize.Height,
-                parentForm = parentForm,
+
             };
             controlInfo.Add(cInfo);
 
@@ -108,7 +111,6 @@ namespace FOIE
                 textValue = controlImageValue,
                 textInfo = picSize.Width + "x" + picSize.Height,
                 controlSuccess = imgExist,
-                parentForm = parentForm,
             };
             controlInfo.Add(cInfo);
             
@@ -174,12 +176,13 @@ namespace FOIE
     public class ControlInfo
     {
         public string name;
+        public string parentName;
         public string clType;
         public string textValue;
         public string textInfo;
         public bool controlSuccess = true;
         public int picIndex;
-        public Form1 parentForm;
+        //public Form1 parentForm;
     }
 
 

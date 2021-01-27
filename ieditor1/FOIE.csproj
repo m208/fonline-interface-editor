@@ -103,7 +103,7 @@
     <Compile Include="Controls\ControlArea.cs" />
     <Compile Include="Controls\ControlButton.cs" />
     <Compile Include="Controls\ControlMain.cs" />
-    <Compile Include="Controls\PicBox.cs">
+    <Compile Include="Controls\ControlsExtended.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Editor.cs" />

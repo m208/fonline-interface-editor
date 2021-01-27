@@ -9,9 +9,9 @@ namespace FOIE
     {
         public List<Bitmap> bitmaps = new List<Bitmap>();
 
-        public AddControlButton(string[] line, Form1 parentForm)
+        public AddControlButton(string[] line)
         {
-            generateControl(line[0], parentForm);
+            generateControl(line[0]);
 
             bool fileExist;
             string infoFieldTxt;
@@ -50,7 +50,7 @@ namespace FOIE
                     textInfo = infoFieldTxt,
                     controlSuccess = fileExist,
                     picIndex = i - 1,
-                    parentForm = parentForm
+                    parentName = line[0]
                 };
                 controlInfo.Add(cInfo);
 
