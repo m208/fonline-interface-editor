@@ -27,10 +27,10 @@ namespace FOIE
                     value = Editor.iniArray[line[i]];
                 }
 
-                string path = getFullPath(value);
+                string path = Editor.getFullPath(value);
                 if (File.Exists(path))
                 {
-                    img = GetBitmap(path);
+                    img = Editor.GetBitmapFromPath (path);
                     infoFieldTxt = img.Width + "x" + img.Height;
                     fileExist = true;
                 }

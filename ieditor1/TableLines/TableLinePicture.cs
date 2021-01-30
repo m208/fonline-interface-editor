@@ -16,13 +16,17 @@ namespace FOIE
             var CheckBox = new CheckBoxImageSwitch
             {
                 Name = "cb" + cInfo.name,
-                Checked = (_cInfo.picIndex == 0),   // bool checkedBox = _cInfo.picIndex == 0;
+                Checked = (_cInfo.picIndex == 0),   
                 Tag = cInfo.parentName,
             };
             Panel.Controls.Add(CheckBox);
 
             var openBttn = new ButtonToOpen("open" + cInfo.name);
+            new ToolTip().SetToolTip(openBttn, "Browse...");
             Panel.Controls.Add(openBttn);
+
+            Panel.Tag = new tableRowTag { parentName = cInfo.parentName };
+
         }
     }
 }

@@ -36,12 +36,12 @@ namespace FOIE
                 controlImageValue = Editor.iniArray[imgName];
             }
 
-            string path = getFullPath(controlImageValue);
+            string path = Editor.getFullPath(controlImageValue);
             bool imgExist = true;
 
             if (File.Exists(path))
             {
-                controlImage = GetBitmap(path);
+                controlImage = Editor.GetBitmapFromPath(path);
                 picSize = new Size(controlImage.Width, controlImage.Height);
             }
             else
@@ -57,7 +57,7 @@ namespace FOIE
                 controlRectValue = Editor.iniArray[rectName];
 
                 int[] coords = Editor.stringToRectArray(controlRectValue);
-                if (isValidRect(coords))
+                if (Editor.isValidRect(coords))
                 {
                     controlSize = new Size(coords[2] - coords[0], coords[3] - coords[1]);
                 }
@@ -84,15 +84,8 @@ namespace FOIE
             string hint = Editor.getHintforKey(rectName);
             new ToolTip().SetToolTip(picBox, hint);
 
-            //picBox.LocationChanged += new EventHandler(picBox_Changed);
-            //picBox.SizeChanged += new EventHandler(picBox_Changed);
             picBox.Paint += new PaintEventHandler(picBox_Paint);
-
-           // picBox.MouseDown += (sender, e) => picBoxClickHighlight(picBox, e);
-           // picBox.MouseUp += (sender, e) => picBoxClickHighlightOff(picBox, e);
-
             ControlMoverOrResizer.Init(picBox);
-
 
             ControlInfo cInfo = new ControlInfo
             {
@@ -123,52 +116,7 @@ namespace FOIE
             g.DrawRectangle(new Pen(Color.Red, 2), 0, 0, ((Control)sender).Width, ((Control)sender).Height);
             g.DrawString(((Control)sender).Name, new Font("Tahoma", 8), Brushes.White, 0, 0);
         }
-        public void picBox_Changed(object sender, EventArgs e)
-        {
-            // Callback here
-        }
 
-
-        //  Utils   --------------------------------------------------------------------------
-        public string getFullPath(string filename)
-        {
-            return Editor.fullPath + filename;
-        }
-
-        public Bitmap GetBitmap(string path)
-        {
-            Bitmap controlImage;
-            if (getFileExtension(path) == ".frm")
-            {
-                Frm frmImg = new Frm(path);
-                controlImage = frmImg.bitmaps[0];
-            }
-            else
-            {
-                controlImage = LoadBitmapUnlocked(path);
-            }
-            return controlImage;
-        }
-
-        private string getFileExtension(string path)
-        {
-            return Path.GetExtension(path).ToLower();
-        }
-
-        private Bitmap LoadBitmapUnlocked(string path)
-        {
-            using (Bitmap bm = new Bitmap(path))
-            {
-                return new Bitmap(bm);
-            }
-        }
-
-        public bool isValidRect(int[] coords)
-        {
-            if (coords.Length == 4 && coords[2] >= coords[0] && coords[3] >= coords[1])
-                return true;
-            else return false;
-        }
 
     }
     //--------------------------------------------------------------------------------------------
@@ -182,7 +130,6 @@ namespace FOIE
         public string textInfo;
         public bool controlSuccess = true;
         public int picIndex;
-        //public Form1 parentForm;
     }
 
 

@@ -28,7 +28,7 @@ namespace FOIE
             int[] coords = Editor.stringToRectArray(value);
 
             Size cSize = new Size(0, 0);
-            if (isValidRect(coords))
+            if (Editor.isValidRect(coords))
             {
                 cSize = new Size(coords[2] - coords[0], coords[3] - coords[1]);
             }
@@ -52,16 +52,7 @@ namespace FOIE
             new ToolTip().SetToolTip(picBox, hint);
 
             picBox.Paint += new PaintEventHandler(picBox_Paint);
-            picBox.LocationChanged += new EventHandler(picBox_Changed);
-            picBox.SizeChanged += new EventHandler(picBox_Changed);
-            // picBox.MouseDown += (sender, e) => picBox.BringToFront();
-
-            picBox.MouseDown += (sender, e) => picBoxClickHighlight(picBox, e);
-            picBox.MouseUp += (sender, e) => picBoxClickHighlightOff(picBox, e);
-
             ControlMoverOrResizer.Init(picBox);
-
-
 
             ControlInfo cInfo = new ControlInfo
             {

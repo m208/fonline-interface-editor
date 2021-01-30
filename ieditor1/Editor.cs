@@ -3,6 +3,8 @@ using Microsoft.Win32;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 
@@ -74,7 +76,6 @@ namespace FOIE
                 if (rk != null) rk.Close();
             }
         }
-        //---------------------------------------------------------
 
 
         //  --------------  INI READING     -----------------------
@@ -104,7 +105,6 @@ namespace FOIE
                     }
                     val = val.Trim();
                     iniArray[key] = val;
-                    //MessageBox.Show(key+val);
                 }
 
             }
@@ -172,7 +172,6 @@ namespace FOIE
                     }
                     val = val.Trim();
                     iniArray[key] = val;
-                    //MessageBox.Show(key+val);
                 }
 
                 if (i + 1 == lines.Length)
@@ -208,6 +207,13 @@ namespace FOIE
             int[] ret = { a[2] - a[0], a[3] - a[1] };
 
             return ret;
+        }
+
+        static public bool isValidRect(int[] coords)
+        {
+            if (coords.Length == 4 && coords[2] >= coords[0] && coords[3] >= coords[1])
+                return true;
+            else return false;
         }
 
         //---------------------------------------------------------------------------------
@@ -294,52 +300,46 @@ namespace FOIE
         {
             return (a & 1) == 0;
         }
+        //----------------------------------------------------------------------------
 
-
-        public static void txtBoxIsUpdated(string name, string type)
+        public static string getFullPath(string filename)
         {
-            
+            return Editor.fullPath + filename;
         }
 
-
-    }
-
-    //-------------------------------------------------------------------
-
-    public class tableRowTag
-    {
-        public Dictionary<string, object> TagDictionary { get; set; }
-
-        public tableRowTag()              //Cunstractor
+        public static Bitmap GetBitmapFromPath(string path)
         {
-            TagDictionary = new Dictionary<string, object>();
-        }
-
-        public void Set(string key, object value)
-        {
-            TagDictionary[key] = value;
-        }
-
-        public object Get(string key)
-        {
-            if (TagDictionary.ContainsKey(key))
+            Bitmap controlImage;
+            if (getFileExtension(path) == ".frm")
             {
-                return TagDictionary[key];
+                Frm frmImg = new Frm(path);
+                controlImage = frmImg.bitmaps[0];
             }
-            else return "empty";
-
+            else
+            {
+                controlImage = LoadBitmapUnlocked(path);
+            }
+            return controlImage;
         }
 
+        private static string getFileExtension(string path)
+        {
+            return Path.GetExtension(path).ToLower();
+        }
 
+        private static Bitmap LoadBitmapUnlocked(string path)
+        {
+            using (Bitmap bm = new Bitmap(path))
+            {
+                return new Bitmap(bm);
+            }
+        }
 
+        //----------------------------------------------------------------------------
 
 
 
     }
-
-
-
-
 
 
 }

@@ -20,6 +20,8 @@ namespace FOIE.TableLines
             Button zBttn = new ButtonToZ("zBttn" + cInfo.name);
             new ToolTip().SetToolTip(zBttn, "Bring to front/ send to back");
             Panel.Controls.Add(zBttn);
+            
+            Panel.Tag = new tableRowTag { parentName = cInfo.name };
         }
 
     }
