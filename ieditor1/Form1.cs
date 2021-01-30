@@ -59,22 +59,6 @@ namespace ieditor1
             drawDefault(name);
         }
 
-
-        private Bitmap LoadBitmapUnlocked(string path)
-        {
-            using (Bitmap bm = new Bitmap(path))
-            {
-                return new Bitmap(bm);
-            }
-        }
-
-        private string getFileExtension(string name)
-        {
-            name = name.Trim();
-            string ext = name.Substring(name.IndexOf("."));
-            return ext.ToLower();
-        }
-
         //------------------------------------------------------------------------------------------------------------------
 
         private void saveIniToFile()
@@ -171,7 +155,6 @@ namespace ieditor1
             }
         }
 
-
         //------------------------------------------------------------------------------------------------------------------
 
         private void openProject()
@@ -216,7 +199,6 @@ namespace ieditor1
                 return openFileDialog1.FileName;
             }
         }
-
 
         //-----------------------------------------------------------------------
 
@@ -266,108 +248,12 @@ namespace ieditor1
 
         //-----------------------------------------------------------------------
 
-
-        private bool isFileExist(string path)
-        {
-            return File.Exists(path);
-        }
-
-        private void setImage(string areaName, string itemName)
-        {
-            PictureBox pb = panel1.Controls.Find(areaName, true).FirstOrDefault() as PictureBox;
-            TextBox tb = this.Controls.Find("tb" + itemName, true).FirstOrDefault() as TextBox;
-
-            string path = Editor.fullPath + tb.Text;
-
-            if (isFileExist(@path))
-            {
-                if (getFileExtension(tb.Text) == ".frm")
-                {
-                    Frm frmImg = new Frm(path);
-                    pb.Image = frmImg.bitmaps[0];
-                }
-                else
-                {
-                    Bitmap img = LoadBitmapUnlocked(path);
-                    pb.Image = img;
-
-                }
-            }
-            else
-            {
-                pb.Image = null;
-            }
-
-        }
-        //------------------------------------------------------------------------
-        private void setImageUpdateStatus(string itemName, bool success)
-        {
-            PictureBox pb = this.Controls.Find("typePic" + itemName, true).FirstOrDefault() as PictureBox;
-            string controlType = (string)(pb.Tag);
-
-            string imgSrc = (success) ? Editor.controlTypesResources[controlType] : Editor.controlTypesResources["error"];
-            object img = FOIE.Properties.Resources.ResourceManager.GetObject(imgSrc);
-
-            pb.Image = (Image)img;
-        }
-        //------------------------------------------------------------------------
-        private void readImageStats(string itemName)
-        {
-            TextBox tb = this.Controls.Find("tb" + itemName, true).FirstOrDefault() as TextBox;
-            string path = Editor.fullPath + tb.Text;
-
-            PictureBox pb = this.Controls.Find("typePic" + itemName, true).FirstOrDefault() as PictureBox;
-            string controlType = (string)(pb.Tag);
-
-            TextBox stb = this.Controls.Find("size" + itemName, true).FirstOrDefault() as TextBox;
-            string newSize = "error";
-            string imgSrc = Editor.controlTypesResources["error"];
-
-            if (isFileExist(@path))
-            {
-                Bitmap img;
-                if (getFileExtension(path) == ".frm")
-                {
-                    Frm frmImg = new Frm(path);
-                    img = frmImg.bitmaps[0];
-                }
-                else
-                {
-                    img = LoadBitmapUnlocked(path);
-                }
-
-                newSize = img.Width + "x" + img.Height;
-                imgSrc = Editor.controlTypesResources[controlType];
-                //Update Array data
-                Editor.iniArray[itemName] = tb.Text;
-            }
-
-
-            object imgOk = FOIE.Properties.Resources.ResourceManager.GetObject(imgSrc);
-            pb.Image = (Image)imgOk;
-            stb.Text = newSize;
-        }
-        //------------------------------------------------------------------------
-
-
-        private void changeArea(string itemName, int[] coords)
-        {
-            PictureBox pb = this.Controls.Find(itemName, true).FirstOrDefault() as PictureBox;
-            pb.Location = new Point(coords[0], coords[1]);
-            pb.Size = new Size(coords[2] - coords[0], coords[3] - coords[1]);
-            pb.Refresh();
-        }
-
-        //-----------------------------------------------------------------------
-
-
         private void clearGui()
         {
             Editor.lineCounter = 0;
             Editor.tableRows.Clear();
             panel1.Controls.Clear();
             panel2.Controls.Clear();
-
 
             // Disable horisontal scroll bar trick
             panel2.AutoScroll = false;
@@ -381,7 +267,6 @@ namespace ieditor1
             refreshJSON();
             drawDefault(Editor.configJsonKeys[0]);
         }
-
 
         public void refreshJSON()
         {
@@ -514,7 +399,6 @@ namespace ieditor1
                 }
             }
 
-
             var CustomFields = Editor.configJSON[item]["Custom"] as JArray;
             foreach (var i in CustomFields)
             {
@@ -568,9 +452,9 @@ namespace ieditor1
 
             foreach (Panel p in panel2.Controls.OfType<Panel>())
             {
-                foreach (TextBox tb in p.Controls.OfType<TextBox>())
+                foreach (TextBoxForValues tb in p.Controls.OfType<TextBoxForValues>())
                 {
-                    tb.TextChanged += (sender, e) => updateTxtBox(tb, e);           // ok
+                    tb.TextChanged += (sender, e) => updateTxtBox(tb, e);           // ok +
                 }
                 foreach (ButtonToHide bttn in p.Controls.OfType<ButtonToHide>())
                 {
@@ -582,11 +466,11 @@ namespace ieditor1
                 }
                 foreach (ButtonToOpen bttn in p.Controls.OfType<ButtonToOpen>())
                 {
-                    bttn.Click += (sender, e) => { changeImg(bttn, e); };           // ok
+                    bttn.Click += (sender, e) => { openImgFile(bttn, e); };           // ok ++
                 }
                 foreach (CheckBoxImageSwitch cb in p.Controls.OfType<CheckBoxImageSwitch>())
                 {
-                    cb.Click += (sender, e) => { selectPic(cb, e); };               // ok
+                    cb.Click += (sender, e) => { selectPicToShow(cb, e); };               // ok
                 }
                 foreach (LinkLabel l in p.Controls.OfType<LinkLabel>())
                 {
@@ -609,14 +493,6 @@ namespace ieditor1
                 ((Control)sender).Height + ((Control)sender).Location.Y
             };
             string newValue = string.Join(" ", coords);
-
-            //var cName = "tb" + ((Control)sender).Name;
-            //TextBox tb = this.Controls.Find(cName, true).FirstOrDefault() as TextBox;
-            //tb.Text = newValue;
-
-            //var sName = "size" + ((Control)sender).Name;
-            //TextBox stb = this.Controls.Find(sName, true).FirstOrDefault() as TextBox;
-            //stb.Text = ((Control)sender).Width + "x" + ((Control)sender).Height;
 
             var cName = "panel" + ((Control)sender).Name;
             TableLine line = this.Controls.Find(cName, true).FirstOrDefault() as TableLine;
@@ -647,45 +523,67 @@ namespace ieditor1
         private void updateTxtBox(object sender, EventArgs e)
         {
             string name = ((Control)sender).Name.Substring("tb".Length);
-            string type = (string)((Control)sender).Tag;
+            string str = ((Control)sender).Text;
+
+            TableLine line = panel2.Controls.Find("panel" + name, true).FirstOrDefault() as TableLine;
+            string type = line.cInfo.clType;
 
             if (type == "Picture")
             {
+                Bitmap newImg = readImage(str);
+
+                string currentGroup = line.cInfo.parentName;
+                int picIndex = line.cInfo.picIndex;
+                PicBox pb = panel1.Controls.Find(currentGroup, true).FirstOrDefault() as PicBox;
+
+                if (newImg == null)
+                {
+                    line.drawErrorIcon();
+                    line.updateInfo("Error!");
+                    newImg = new Bitmap(FOIE.Properties.Resources.nofile1);
+                }
+                else
+                {
+                    line.drawOkIcon();
+                    line.updateInfo(newImg.Width + "x" + newImg.Height);
+                }
+
+                pb.images[picIndex] = newImg;
+
+
                 CheckBox cb = this.Controls.Find("cb" + name, true).FirstOrDefault() as CheckBox;
-                readImageStats(name);
                 if (cb.Checked)
                 {
-                    string currentGroup = (string)cb.Tag;
-                    setImage2(currentGroup, name);
+                    pb.Image = newImg;
                 }
             }
             else if (type == "Area" || type == "AreaMain")
             {
-                string str = ((Control)sender).Text;
                 int[] coords = Editor.stringToRectArray(str);
 
                 if (coords != null && Editor.isValidRect(coords))
                 {
-                    changeArea(name, coords);
-                    setImageUpdateStatus(name, true);
+                    PictureBox pb = this.Controls.Find(name, true).FirstOrDefault() as PictureBox;
+                    pb.Location = new Point(coords[0], coords[1]);
+                    pb.Size = new Size(coords[2] - coords[0], coords[3] - coords[1]);
+                    pb.Refresh();
+
+                    line.drawOkIcon();
+                    line.updateInfo(Editor.getSizeFromStringCoords(str));
                 }
                 else
                 {
-                    setImageUpdateStatus(name, false);
-                    TextBox stb = this.Controls.Find("size" + name, true).FirstOrDefault() as TextBox;
-                    stb.Text = "Error!";
+                    line.drawErrorIcon();
+                    line.updateInfo("Error!");
                 }
 
             }
-            else if (type == "Custom")
-            {
-                // Update Array data
-                Editor.iniArray[name] = ((Control)sender).Text;
-            }
 
+            Editor.iniArray[name] = ((Control)sender).Text;
         }
 
         //------------------------------------------------------------------------------------------------------------------
+
         private void showHideArea(object sender, EventArgs e)
         {
             ButtonToHide b = (ButtonToHide)sender;
@@ -717,7 +615,7 @@ namespace ieditor1
 
         //-------------------------------------------------------------------
 
-        private void changeImg(object sender, EventArgs e)
+        private void openImgFile(object sender, EventArgs e)
         {
             string newPic = getFileName("Images|*.png; *.jpg; *frm; *.fofrm", true);   //  FOFRM !!!
             if (newPic != null)
@@ -727,51 +625,14 @@ namespace ieditor1
 
                 Editor.iniArray[currentItem] = picName;
 
-                TextBox tb = this.Controls.Find("tb" + currentItem, true).FirstOrDefault() as TextBox;
-                tb.Text = picName;
-
-                Bitmap img = Editor.GetBitmapFromPath(newPic);
-
-
-                PicBox pb = panel1.Controls.Find(Editor.currentBackground, true).FirstOrDefault() as PicBox;
-
-                //PicBox pb = panel1.Controls.Find(currentItem, true).FirstOrDefault() as PicBox;
-                pb.Image = img;
-
-                CheckBox cb = this.Controls.Find("cb" + currentItem, true).FirstOrDefault() as CheckBox;
-
-                //readImageStats(currentItem);
-
-                if (cb.Checked)
-                {
-                    string currentGroup = (string)cb.Tag;
-                    setImage2(currentGroup, currentItem);
-                }
-
+                TableLine line = this.Controls.Find("panel" + currentItem, true).FirstOrDefault() as TableLine;
+                line.updateValue(picName);
             }
-        }
-
-        private void setImage2(string currentGroup, string currentItem)
-        {
-            TextBox tb = this.Controls.Find("tb" + currentItem, true).FirstOrDefault() as TextBox;
-            string picName = tb.Text;
-            string path = Editor.getFullPath(picName);
-
-            Bitmap img;
-            if (File.Exists(path))
-            {
-                img = Editor.GetBitmapFromPath(path);
-                //picSize = new Size(controlImage.Width, controlImage.Height);
-            }
-
-
-
-
         }
 
         //--------------------------------------------------------------------------------------------------------------
 
-        private void selectPic(object sender, EventArgs e)
+        private void selectPicToShow(object sender, EventArgs e)
         {
             CheckBoxImageSwitch cb = (Control)sender as CheckBoxImageSwitch;
             if (cb.Checked) return;
@@ -780,8 +641,10 @@ namespace ieditor1
 
             var allCBoxes = GetAll(this, typeof(CheckBoxImageSwitch));
 
+            string name = cb.Name.Substring("cb".Length); // substring = crop "cb"
+            TableLine line = panel2.Controls.Find("panel" + name, true).FirstOrDefault() as TableLine;
+            int picIndex = line.cInfo.picIndex;
             string currentGroup = (string)cb.Tag;
-            string currentItem = cb.Name;
 
             foreach (CheckBoxImageSwitch c in allCBoxes)
             {
@@ -792,7 +655,8 @@ namespace ieditor1
             }
             cb.Checked = true;
 
-            //setImage(currentGroup, currentItem.Substring("cb".Length)); // substring = crop "cb"
+            PicBox pb = panel1.Controls.Find(currentGroup, true).FirstOrDefault() as PicBox;
+            pb.Image = pb.images[picIndex];
         }
 
         //-------------------------------------------------------------------
@@ -816,7 +680,6 @@ namespace ieditor1
             TextBox stb = this.Controls.Find(sName, true).FirstOrDefault() as TextBox;
             stb.Text = ((Control)sender).Width + "x" + ((Control)sender).Height;
 
-            //Update Array data
             Editor.iniArray[itemName] = newValue;
         }
 
@@ -830,7 +693,7 @@ namespace ieditor1
             p.BackColor = Color.Violet;
 
             ButtonToZ zb = this.Controls.Find("zBttn" + name, true).FirstOrDefault() as ButtonToZ;
-            zb.isOnTop = true; 
+            zb.isOnTop = true;
         }
 
         private void panelClickHighlightOff(object sender, EventArgs e)
@@ -840,7 +703,21 @@ namespace ieditor1
             p.BackColor = Color.Transparent;
         }
 
-        //---------------------------------------------------------------------------------------
+        //------------------------------------------------------------------------
+
+        private Bitmap readImage(string fileName)
+        {
+            string path = Editor.getFullPath(fileName);
+            if (File.Exists(path))
+            {
+                return Editor.GetBitmapFromPath(path);
+            }
+            else return null;
+        }
+
+        //------------------------------------------------------------------------
+
+
 
     }
 }

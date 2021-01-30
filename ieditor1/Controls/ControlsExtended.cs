@@ -1,10 +1,14 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace FOIE.Controls
 {
     public class PicBox : PictureBox
     {
+        public List<Bitmap> images;
+
+        public PicBox() {}
 
     }
 
@@ -15,12 +19,12 @@ namespace FOIE.Controls
     {
         public PicBoxIcon(string name, string controlType)
         {
-            Name = "typePic" + name;
+            Name = "typePic";
             Size = new Size(20, 20);
             Location = new Point(175, 0);
             Image = (Image)Properties.Resources.ResourceManager.GetObject(Editor.controlTypesResources[controlType]);
             BackgroundImageLayout = ImageLayout.Stretch;
-            Tag = controlType;
+            //Tag = controlType;
         }
         public void drawError()
         {
@@ -66,7 +70,6 @@ namespace FOIE.Controls
             Size = new Size(100, 25);
             Location = new Point(200, 0);
             Text = value;
-            Tag = clType;
         }
     }
 
@@ -133,7 +136,6 @@ namespace FOIE.Controls
             Location = new Point(370, 0);
             BackgroundImage = Properties.Resources.folder1;
             BackgroundImageLayout = ImageLayout.Zoom;
-            Tag = "Up";
         }
 
 

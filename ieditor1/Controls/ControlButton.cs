@@ -40,7 +40,9 @@ namespace FOIE
                     infoFieldTxt = "error";
                     fileExist = false;
                 }
-                bitmaps.Add(img);
+                bitmaps.Add(img);   //?
+
+                //picBox.images.Add(img);
 
                 ControlInfo cInfo = new ControlInfo
                 {
@@ -61,6 +63,8 @@ namespace FOIE
             {
                 picBox.Image = bitmaps[0];
                 picBox.BackgroundImage = null;
+
+                picBox.images = bitmaps;
             }
         }
     }

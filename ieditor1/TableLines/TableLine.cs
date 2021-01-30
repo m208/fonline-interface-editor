@@ -62,18 +62,14 @@ namespace FOIE.TableLines
 
         public void drawErrorIcon()
         {
-            foreach (PicBoxIcon pb in this.Controls.OfType<PicBoxIcon>())
-            {
-                pb.drawError();
-            }
+            PicBoxIcon pb = this.Controls.Find("typePic", false).FirstOrDefault() as PicBoxIcon;
+            pb.drawError();
         }
 
         public void drawOkIcon()
         {
-            foreach (PicBoxIcon pb in this.Controls.OfType<PicBoxIcon>())
-            {
-                pb.drawIcon(cInfo.clType);
-            }
+            PicBoxIcon pb = this.Controls.Find("typePic", false).FirstOrDefault() as PicBoxIcon;
+            pb.drawIcon(cInfo.clType);
         }
 
         public void updateValue(string value)

@@ -10,13 +10,10 @@ namespace FOIE
 {
     public class AddControlMain
     {
-
         public PicBox picBox;
 
         public List<ControlInfo> controlInfo = new List<ControlInfo>();
         public string controlRectValue, controlImageValue;
-        
-        
         
         public Bitmap controlImage;
         public List<Bitmap> controlImages = new List<Bitmap>();
@@ -25,7 +22,6 @@ namespace FOIE
 
         public AddControlMain(string rectName, string imgName)
         {
-            
             string controlImageValue = "";
             string controlRectValue  = "0 0 0 0";
             Size picSize = new Size(0, 0);
@@ -71,8 +67,11 @@ namespace FOIE
                 //controlRectValue = ?
             }
 
+
             //--------------------------------------------------------------------------------------
-            picBox = new PicBox
+        List<Bitmap> bitmaps = new List<Bitmap>();
+
+        picBox = new PicBox
             {
                 Name = rectName,
                 Size = controlSize,
@@ -80,6 +79,9 @@ namespace FOIE
                 Image = controlImage,
                 BackgroundImageLayout = ImageLayout.None,
             };
+
+            bitmaps.Add(controlImage);
+            picBox.images = bitmaps;
 
             string hint = Editor.getHintforKey(rectName);
             new ToolTip().SetToolTip(picBox, hint);
@@ -104,6 +106,7 @@ namespace FOIE
                 textValue = controlImageValue,
                 textInfo = picSize.Width + "x" + picSize.Height,
                 controlSuccess = imgExist,
+                parentName = rectName
             };
             controlInfo.Add(cInfo);
             
