@@ -9,8 +9,6 @@ namespace FOIE
         public TableLinePicture(ControlInfo _cInfo)
         {
             cInfo = _cInfo;
-            controlTypeImg = (cInfo.controlSuccess) ? "icon_image" : "icon_error";
-
             createTableLine();
 
             var CheckBox = new CheckBoxImageSwitch
@@ -19,13 +17,13 @@ namespace FOIE
                 Checked = (_cInfo.picIndex == 0),   
                 Tag = cInfo.parentName,
             };
-            Panel.Controls.Add(CheckBox);
+            this.Controls.Add(CheckBox);
 
             var openBttn = new ButtonToOpen("open" + cInfo.name);
             new ToolTip().SetToolTip(openBttn, "Browse...");
-            Panel.Controls.Add(openBttn);
+            this.Controls.Add(openBttn);
 
-            Panel.Tag = new tableRowTag { parentName = cInfo.parentName };
+            this.Tag = new tableRowTag { parentName = cInfo.parentName };
 
         }
     }

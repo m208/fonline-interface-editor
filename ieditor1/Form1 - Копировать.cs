@@ -1311,7 +1311,8 @@ namespace ieditor1
             foreach (TableLine line in Editor.tableRows)
             {
                 line.Panel.Location = new Point(0, 25 * Editor.lineCounter);
-                panel2.Controls.Add(line.Panel);
+
+                panel2.Controls.Add(line);
 
                
 

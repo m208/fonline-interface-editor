@@ -1,16 +1,16 @@
-﻿using ieditor1;
+﻿using FOIE.Controls;
+using ieditor1;
 using System;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace FOIE.TableLines
 {
-    public class TableLine
+    public class TableLine : Panel
     {
-
-        public Panel Panel = new Panel();
         public ControlInfo cInfo;
-        public string controlTypeImg = "icon_hatch";        // area by default area
+        public Color prevColor;
 
         public TableLine() { }
 
@@ -22,89 +22,82 @@ namespace FOIE.TableLines
 
         public void createTableLine()
         {
-
-            Panel = new Panel
-            {
-                Name = "panel" + cInfo.name,
-                Size = new Size(450, 25),
-                Location = new Point(0, 25 * Editor.lineCounter),   // didnt work out here
-                Tag = new tableRowTag
-                {
-
-                },
-            };
+            Name = "panel" + cInfo.name;
+            Size = new Size(450, 25);
+            Tag = new tableRowTag{ };
 
             // ------ LABELS ---------------------------------------------------
 
-            string hint = Editor.getHintforKey(cInfo.name);     // tool tips from dictionary
-
+            Label lbl;
             if (cInfo.clType == "Area")
             {
-                LinkLabel llbl = new LinkLabel
-                {
-                    Name = "lbl" + cInfo.name,
-                    Size = new Size(100, 25),
-                    Location = new Point(5, 0),
-                    Text = cInfo.name,
-                };
-                new ToolTip().SetToolTip(llbl, hint);
-                Panel.Controls.Add(llbl);
+                lbl = new LinkLabelHeader(cInfo.name);
             }
             else
             {
-                Label lbl = new Label
-                {
-                    Name = "lbl" + cInfo.name,
-                    Size = new Size(100, 25),
-                    Location = new Point(5, 0),
-                    Text = cInfo.name,
-                };
-                new ToolTip().SetToolTip(lbl, hint);
-                Panel.Controls.Add(lbl);
+                lbl = new LabelHeader(cInfo.name);
             }
+
+            string hint = Editor.getHintforKey(cInfo.name);     // tool tips from dictionary
+
+            new ToolTip().SetToolTip(lbl, hint);
+            this.Controls.Add(lbl);
 
             // ------ PICTURE ---------------------------------------------------
 
-            object img = FOIE.Properties.Resources.ResourceManager.GetObject(controlTypeImg);
-
-            PictureBox pb = new PictureBox
-            {
-                Name = "typePic" + cInfo.name,
-                Size = new Size(20, 20),
-                Location = new Point(175, 0),
-                Image = (Image)img,
-                BackgroundImageLayout = ImageLayout.Stretch,
-                Tag = cInfo.clType,
-            };
-
-            Panel.Controls.Add(pb);
+            PicBoxIcon pb = new PicBoxIcon(cInfo.name, cInfo.clType);
+            this.Controls.Add(pb);
 
             // ------ TEXT BOXES ---------------------------------------------------
 
-            TextBox tb1 = new TextBox
-            {
-                Name = "tb" + cInfo.name,
-                Size = new Size(100, 25),
-                Location = new Point(200, 0),
-                Text = cInfo.textValue,
-                Tag = cInfo.clType,
-            };
+            TextBoxForValues tb1 = new TextBoxForValues(cInfo.name, cInfo.textValue, cInfo.clType);
+            TextBoxForInfo tb2 = new TextBoxForInfo(cInfo.name, cInfo.textInfo);
 
-            TextBox tb2 = new TextBox
-            {
-                Name = "size" + cInfo.name,
-                Size = new Size(60, 25),
-                Location = new Point(305, 0),
-                Text = cInfo.textInfo,
-                Enabled = false,
-            };
-
-            Panel.Controls.Add(tb1);
-            Panel.Controls.Add(tb2);
+            this.Controls.Add(tb1);
+            this.Controls.Add(tb2);
 
         }
 
+        // ------ METODS ---------------------------------------------------
 
+        public void drawErrorIcon()
+        {
+            foreach (PicBoxIcon pb in this.Controls.OfType<PicBoxIcon>())
+            {
+                pb.drawError();
+            }
+        }
+
+        public void drawOkIcon()
+        {
+            foreach (PicBoxIcon pb in this.Controls.OfType<PicBoxIcon>())
+            {
+                pb.drawIcon(cInfo.clType);
+            }
+        }
+
+        public void updateValue(string value)
+        {
+            var tb = this.Controls.Find("tb" + cInfo.name, false).FirstOrDefault() as TextBox;
+            tb.Text = value;
+        }
+        public void updateInfo(string value)
+        {
+            var tb = this.Controls.Find("size" + cInfo.name, false).FirstOrDefault() as TextBox;
+            tb.Text = value;
+        }
+
+        public void highLiteRow(bool onOff)
+        {
+            if (onOff)
+            {
+                prevColor = this.BackColor;
+                BackColor = Color.Violet;
+            } else
+            {
+                BackColor = prevColor;
+            }
+        }
     }
 
     //----   TAG OBJECT  ------------------------------------------------------------------------

@@ -124,10 +124,15 @@
     <Compile Include="SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="TableLines\TableLine.cs" />
-    <Compile Include="TableLines\TableLineArea.cs" />
-    <Compile Include="TableLines\TableLineCustom.cs" />
-    <Compile Include="TableLines\TableLinePicture.cs" />
+    <Compile Include="TableLines\TableLine.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TableLines\TableLineArea.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TableLines\TableLinePicture.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

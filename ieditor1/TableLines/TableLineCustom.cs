@@ -11,7 +11,6 @@ namespace FOIE.TableLines
         
         public TableLineCustom(ControlInfo _cInfo)
         {
-            controlTypeImg = "typography";
             cInfo = _cInfo;
             createTableLine();
         }

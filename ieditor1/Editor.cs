@@ -17,7 +17,7 @@ namespace FOIE
 
         static public List<TableLine> tableRows = new List<TableLine>();
 
-        static public Dictionary<string, string> controlTypesResources = new Dictionary<string, string>
+        public static Dictionary<string, string> controlTypesResources = new Dictionary<string, string>
         {
             ["Area"] = "icon_hatch",
             ["AreaMain"] = "icon_hatch",
