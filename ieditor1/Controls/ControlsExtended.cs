@@ -17,14 +17,13 @@ namespace FOIE.Controls
 
     public class PicBoxIcon : PictureBox
     {
-        public PicBoxIcon(string name, string controlType)
+        public PicBoxIcon(string name, string controlType, bool controlSuccess = true)
         {
             Name = "typePic";
             Size = new Size(20, 20);
             Location = new Point(175, 0);
-            Image = (Image)Properties.Resources.ResourceManager.GetObject(Editor.controlTypesResources[controlType]);
+            Image = controlSuccess ? (Image)Properties.Resources.ResourceManager.GetObject(Editor.controlTypesResources[controlType]) : new Bitmap(FOIE.Properties.Resources.icon_error);
             BackgroundImageLayout = ImageLayout.Stretch;
-            //Tag = controlType;
         }
         public void drawError()
         {

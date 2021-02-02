@@ -334,7 +334,6 @@ namespace ieditor1
 
         //------------------------------------------------------------------
 
-        //      REF StART HERE   
         private void drawDefault(string item)
         {
             clearGui();
@@ -617,7 +616,7 @@ namespace ieditor1
 
         private void openImgFile(object sender, EventArgs e)
         {
-            string newPic = getFileName("Images|*.png; *.jpg; *frm; *.fofrm", true);   //  FOFRM !!!
+            string newPic = getFileName("Images|*.png; *.jpg; *frm; *.fofrm", true);  
             if (newPic != null)
             {
                 string picName = newPic.Substring(Editor.fullPath.Length);
@@ -710,7 +709,9 @@ namespace ieditor1
             string path = Editor.getFullPath(fileName);
             if (File.Exists(path))
             {
-                return Editor.GetBitmapFromPath(path);
+                ImgPreparer image = new ImgPreparer(path);
+                return image.images[0];
+
             }
             else return null;
         }

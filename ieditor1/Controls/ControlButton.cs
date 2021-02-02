@@ -28,9 +28,13 @@ namespace FOIE
                 }
 
                 string path = Editor.getFullPath(value);
+                
                 if (File.Exists(path))
                 {
-                    img = Editor.GetBitmapFromPath (path);
+                    ImgPreparer image = new ImgPreparer(path);
+                    img = image.images[0];
+
+                    //img = Editor.GetBitmapFromPath (path);
                     infoFieldTxt = img.Width + "x" + img.Height;
                     fileExist = true;
                 }
@@ -41,8 +45,6 @@ namespace FOIE
                     fileExist = false;
                 }
                 bitmaps.Add(img);   //?
-
-                //picBox.images.Add(img);
 
                 ControlInfo cInfo = new ControlInfo
                 {

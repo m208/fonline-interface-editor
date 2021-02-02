@@ -37,7 +37,10 @@ namespace FOIE
 
             if (File.Exists(path))
             {
-                controlImage = Editor.GetBitmapFromPath(path);
+                ImgPreparer image = new ImgPreparer(path);
+                controlImage = image.images[0];
+
+                //controlImage = Editor.GetBitmapFromPath(path);
                 picSize = new Size(controlImage.Width, controlImage.Height);
             }
             else

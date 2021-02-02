@@ -45,7 +45,7 @@ namespace FOIE.TableLines
 
             // ------ PICTURE ---------------------------------------------------
 
-            PicBoxIcon pb = new PicBoxIcon(cInfo.name, cInfo.clType);
+            PicBoxIcon pb = new PicBoxIcon(cInfo.name, cInfo.clType, cInfo.controlSuccess);
             this.Controls.Add(pb);
 
             // ------ TEXT BOXES ---------------------------------------------------

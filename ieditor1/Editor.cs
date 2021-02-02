@@ -88,17 +88,15 @@ namespace FOIE
             foreach (string line in lines.Reverse())
             //foreach (string line in lines)
             {
-                string key = "";
-                string val = "";
                 string l = line.Trim();
                 int indexOfCharEquals = l.IndexOf('=');
                 int indexOfCharSharp = l.IndexOf('#');
 
                 if (indexOfCharEquals > 0 && indexOfCharSharp != 0)
                 {
-                    key = l.Substring(0, indexOfCharEquals);
+                    string key = l.Substring(0, indexOfCharEquals);
                     key = key.Trim();
-                    val = l.Substring(indexOfCharEquals + 1);
+                    string val = l.Substring(indexOfCharEquals + 1);
                     if (val.IndexOf('#') > 0)
                     {
                         val = val.Substring(0, val.IndexOf('#'));
@@ -302,11 +300,16 @@ namespace FOIE
         }
         //----------------------------------------------------------------------------
 
+
+        //      IMG PREPARER
+
+
         public static string getFullPath(string filename)
         {
             return Editor.fullPath + filename;
         }
 
+        /*
         public static Bitmap GetBitmapFromPath(string path)
         {
             Bitmap controlImage;
@@ -334,6 +337,8 @@ namespace FOIE
                 return new Bitmap(bm);
             }
         }
+
+        */
 
         //----------------------------------------------------------------------------
 

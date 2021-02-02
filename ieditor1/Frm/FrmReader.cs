@@ -2,10 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 //  fallout.fandom.com/wiki/FRM_file 
 
@@ -32,8 +28,8 @@ namespace FOIE
         public int actionFrame;
         public int dir0_shiftX, dir0_shiftY;
 
-        public FrameImage[] frames;
-        public Bitmap[] bitmaps;
+        public List<FrameImage> frames;
+        public List<Bitmap> bitmaps;
 
         public Frm(string fileName)
         {
@@ -45,7 +41,7 @@ namespace FOIE
                 dir0_shiftY = readValue(reader, Pointers.dir0_shiftY);
 
                 int framesPerDir = readValue(reader, Pointers.framesPerDirNum);
-                frames = new FrameImage[framesPerDir];
+                frames = new List<FrameImage>(framesPerDir);
 
                 int startOffset = Pointers.frame0_Width.offset;
                 int frameSizeOffset = 0;
@@ -63,7 +59,7 @@ namespace FOIE
                     reader.Read(data, 0, size);
 
                     FrameImage frame = new FrameImage(width, height, data);
-                    frames[i] = frame;
+                    frames.Insert(i, frame);
 
                     frameSizeOffset += size;
                 }
@@ -91,7 +87,7 @@ namespace FOIE
 
         public void FrameImageToBitmaps()
         {
-            bitmaps = new Bitmap[frames.Length];
+            bitmaps = new List<Bitmap>(frames.Count);
 
             int i = 0;
             foreach (FrameImage frame in frames)
@@ -111,14 +107,12 @@ namespace FOIE
                         }
                     }
                 }
-                bitmaps[i] = bmp;
+                bitmaps.Insert(i, bmp);
                 i++;
             }
         }
 
     }
-
-
 
     //--------------------------------------------------------------------
 

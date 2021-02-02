@@ -114,8 +114,10 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Frm\FoFrmReader.cs" />
     <Compile Include="Frm\FrmPalette.cs" />
     <Compile Include="Frm\FrmReader.cs" />
+    <Compile Include="ImgPreparer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SettingsForm.cs">
