@@ -1,4 +1,4 @@
-﻿using FOIE.Controls;
+﻿
 using ieditor1;
 using System;
 using System.Drawing;

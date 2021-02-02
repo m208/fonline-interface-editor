@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -48,8 +49,9 @@
             this.menuStrip0 = new System.Windows.Forms.MenuStrip();
             this.devMenuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.test1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.panel3 = new System.Windows.Forms.Panel();
             this.test2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.menuStrip0.SuspendLayout();
             this.panel3.SuspendLayout();
             this.SuspendLayout();
@@ -181,9 +183,16 @@
             // test1ToolStripMenuItem
             // 
             this.test1ToolStripMenuItem.Name = "test1ToolStripMenuItem";
-            this.test1ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.test1ToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
             this.test1ToolStripMenuItem.Text = "test1";
             this.test1ToolStripMenuItem.Click += new System.EventHandler(this.test1ToolStripMenuItem_Click);
+            // 
+            // test2ToolStripMenuItem
+            // 
+            this.test2ToolStripMenuItem.Name = "test2ToolStripMenuItem";
+            this.test2ToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
+            this.test2ToolStripMenuItem.Text = "test2";
+            this.test2ToolStripMenuItem.Click += new System.EventHandler(this.test2ToolStripMenuItem_Click);
             // 
             // panel3
             // 
@@ -198,13 +207,6 @@
             this.panel3.Size = new System.Drawing.Size(6, 426);
             this.panel3.TabIndex = 11;
             this.panel3.Tag = "MainPic Placeholder";
-            // 
-            // test2ToolStripMenuItem
-            // 
-            this.test2ToolStripMenuItem.Name = "test2ToolStripMenuItem";
-            this.test2ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.test2ToolStripMenuItem.Text = "test2";
-            this.test2ToolStripMenuItem.Click += new System.EventHandler(this.test2ToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -249,6 +251,7 @@
         private System.Windows.Forms.ToolStripMenuItem devMenuToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem test1ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem test2ToolStripMenuItem;
+        private System.Windows.Forms.Timer timer1;
     }
 }
 

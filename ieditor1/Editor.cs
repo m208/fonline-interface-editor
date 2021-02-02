@@ -301,44 +301,11 @@ namespace FOIE
         //----------------------------------------------------------------------------
 
 
-        //      IMG PREPARER
-
-
         public static string getFullPath(string filename)
         {
             return Editor.fullPath + filename;
         }
 
-        /*
-        public static Bitmap GetBitmapFromPath(string path)
-        {
-            Bitmap controlImage;
-            if (getFileExtension(path) == ".frm")
-            {
-                Frm frmImg = new Frm(path);
-                controlImage = frmImg.bitmaps[0];
-            }
-            else
-            {
-                controlImage = LoadBitmapUnlocked(path);
-            }
-            return controlImage;
-        }
-
-        private static string getFileExtension(string path)
-        {
-            return Path.GetExtension(path).ToLower();
-        }
-
-        private static Bitmap LoadBitmapUnlocked(string path)
-        {
-            using (Bitmap bm = new Bitmap(path))
-            {
-                return new Bitmap(bm);
-            }
-        }
-
-        */
 
         //----------------------------------------------------------------------------
 

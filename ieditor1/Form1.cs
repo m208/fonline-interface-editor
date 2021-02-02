@@ -1,5 +1,5 @@
 ﻿using FOIE;
-using FOIE.Controls;
+
 using FOIE.TableLines;
 using Newtonsoft.Json.Linq;
 using System;
@@ -467,6 +467,10 @@ namespace ieditor1
                 {
                     bttn.Click += (sender, e) => { openImgFile(bttn, e); };           // ok ++
                 }
+                foreach (ButtonToAnimate bttn in p.Controls.OfType<ButtonToAnimate>())
+                {
+                    bttn.Click += (sender, e) => { animateImage(bttn, e); };           // 
+                }
                 foreach (CheckBoxImageSwitch cb in p.Controls.OfType<CheckBoxImageSwitch>())
                 {
                     cb.Click += (sender, e) => { selectPicToShow(cb, e); };               // ok
@@ -612,6 +616,23 @@ namespace ieditor1
             b.isOnTop = !b.isOnTop;
         }
 
+        //-------------------------------------------------------------------
+
+        private void animateImage(object sender, EventArgs e)
+        {
+            ButtonToAnimate b = (ButtonToAnimate)sender;
+            string name = b.Name.Substring("play".Length); // crop "play"
+            
+            TableLine line = this.Controls.Find("panel" + name, true).FirstOrDefault() as TableLine;
+            string parentName = line.cInfo.parentName;
+            int picIndex = line.cInfo.picIndex;
+
+            PicBox p = this.panel1.Controls.Find(parentName, true).FirstOrDefault() as PicBox;
+
+            p.PlayAnimation(picIndex, b.animationPaused);
+            b.animationPaused = !b.animationPaused;
+        }
+        
         //-------------------------------------------------------------------
 
         private void openImgFile(object sender, EventArgs e)

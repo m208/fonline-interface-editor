@@ -2,13 +2,34 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace FOIE.Controls
+namespace FOIE
 {
     public class PicBox : PictureBox
     {
-        public List<Bitmap> images;
 
-        public PicBox() {}
+        public List<ImgPreparer> frames;
+        public List<Bitmap> images;
+        private readonly Timer t = new Timer();
+
+        public PicBox() { }
+
+        public void PlayAnimation(int picIndex, bool animationPaused)
+        {
+            int num = 0;
+            if (!animationPaused)
+            {
+                t.Interval = 1000 / frames[picIndex].fps;
+
+                t.Enabled = true;
+                t.Tick += delegate
+                {
+                    num = ++num % frames[picIndex].images.Count;
+                    Image = frames[picIndex].images[num];
+                };
+
+            }
+            else t.Enabled = false;
+        }
 
     }
 
@@ -137,6 +158,23 @@ namespace FOIE.Controls
             BackgroundImageLayout = ImageLayout.Zoom;
         }
 
+
+    }
+
+    public class ButtonToAnimate : Button
+    {
+        public bool animationPaused = false;
+
+        public ButtonToAnimate(string name)
+
+        {
+            Name = name;
+
+            Size = new Size(20, 20);
+            Location = new Point(125, 0);
+            BackgroundImage = Properties.Resources.up;
+            BackgroundImageLayout = ImageLayout.Zoom;
+        }
 
     }
 

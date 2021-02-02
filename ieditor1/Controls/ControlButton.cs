@@ -1,5 +1,4 @@
-﻿using ieditor1;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 
@@ -8,6 +7,7 @@ namespace FOIE
     public class AddControlButton : AddControlArea
     {
         public List<Bitmap> bitmaps = new List<Bitmap>();
+        public List<ImgPreparer> frames = new List<ImgPreparer>();
 
         public AddControlButton(string[] line)
         {
@@ -21,6 +21,7 @@ namespace FOIE
 
             for (int i = 1; i < line.Length; i++)
             {
+                bool animated = false;
 
                 if (Editor.iniArray.ContainsKey(line[i]))
                 {
@@ -28,15 +29,18 @@ namespace FOIE
                 }
 
                 string path = Editor.getFullPath(value);
-                
+
                 if (File.Exists(path))
                 {
                     ImgPreparer image = new ImgPreparer(path);
                     img = image.images[0];
 
-                    //img = Editor.GetBitmapFromPath (path);
+                    frames.Add(image);
+
+
                     infoFieldTxt = img.Width + "x" + img.Height;
                     fileExist = true;
+                    animated = (image.images.Count > 1);
                 }
                 else
                 {
@@ -54,7 +58,8 @@ namespace FOIE
                     textInfo = infoFieldTxt,
                     controlSuccess = fileExist,
                     picIndex = i - 1,
-                    parentName = line[0]
+                    parentName = line[0],
+                    animated = animated
                 };
                 controlInfo.Add(cInfo);
 
@@ -67,6 +72,9 @@ namespace FOIE
                 picBox.BackgroundImage = null;
 
                 picBox.images = bitmaps;
+                picBox.frames = frames;
+
+
             }
         }
     }

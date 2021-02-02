@@ -1,7 +1,4 @@
-﻿using FOIE.Controls;
-using ieditor1;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
@@ -40,7 +37,6 @@ namespace FOIE
                 ImgPreparer image = new ImgPreparer(path);
                 controlImage = image.images[0];
 
-                //controlImage = Editor.GetBitmapFromPath(path);
                 picSize = new Size(controlImage.Width, controlImage.Height);
             }
             else
@@ -136,6 +132,7 @@ namespace FOIE
         public string textInfo;
         public bool controlSuccess = true;
         public int picIndex;
+        public bool animated = false;
     }
 
 
