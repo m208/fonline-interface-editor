@@ -47,6 +47,7 @@ namespace FOIE
                     img = new Bitmap(FOIE.Properties.Resources.nofile1);
                     infoFieldTxt = "error";
                     fileExist = false;
+                    frames.Add(null);
                 }
                 bitmaps.Add(img);   //?
 

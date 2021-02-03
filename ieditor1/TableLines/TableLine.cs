@@ -1,7 +1,4 @@
-﻿
-using ieditor1;
-using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -24,7 +21,7 @@ namespace FOIE.TableLines
         {
             Name = "panel" + cInfo.name;
             Size = new Size(450, 25);
-            Tag = new tableRowTag{ };
+            Tag = new tableRowTag { };
 
             // ------ LABELS ---------------------------------------------------
 
@@ -89,10 +86,17 @@ namespace FOIE.TableLines
             {
                 prevColor = this.BackColor;
                 BackColor = Color.Violet;
-            } else
+            }
+            else
             {
                 BackColor = prevColor;
             }
+        }
+
+        public void setCheckBox(bool set)
+        {
+            CheckBoxImageSwitch cb = this.Controls.Find("cb", false).FirstOrDefault() as CheckBoxImageSwitch;
+            cb.Checked = set;
         }
 
         public void showPlayButton(bool show)
@@ -100,11 +104,10 @@ namespace FOIE.TableLines
             ButtonToAnimate playBttn = this.Controls.Find("play", false).FirstOrDefault() as ButtonToAnimate;
             playBttn.Visible = show;
             playBttn.displayButton = show;
+
+            
+
         }
-
-
-
-
     }
 
     //----   TAG OBJECT  ------------------------------------------------------------------------

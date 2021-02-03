@@ -550,18 +550,21 @@ namespace ieditor1
                     line.drawOkIcon();
                     line.updateInfo(newImg.images[0].Width + "x" + newImg.images[0].Height);
 
-                    if (newImg.images.Count > 1) line.showPlayButton(true);
-                    else line.showPlayButton(false);
+                    line.cInfo.animated = (newImg.images.Count > 1);
+
                 }
                 else
                 {
                     pb.images[picIndex] = new Bitmap(FOIE.Properties.Resources.nofile1);
                     line.drawErrorIcon();
                     line.updateInfo("Error!");
-                    line.showPlayButton(false);
+                    line.cInfo.animated = false;
+                    line.showPlayButton(line.cInfo.animated);
                 }
 
-                CheckBox cb = this.Controls.Find("cb" + name, true).FirstOrDefault() as CheckBox;
+                //line.showPlayButton(line.cInfo.animated);
+
+                CheckBox cb = line.Controls.Find("cb", true).FirstOrDefault() as CheckBox;
                 if (cb.Checked)
                 {
                     pb.Image = pb.images[picIndex];
@@ -635,8 +638,14 @@ namespace ieditor1
 
             PicBox p = this.panel1.Controls.Find(parentName, true).FirstOrDefault() as PicBox;
 
-            p.PlayAnimation(picIndex, b.animationPaused);
-            b.animationPaused = !b.animationPaused;
+            line.cInfo.animationPaused = !line.cInfo.animationPaused;
+            p.PlayAnimation(picIndex, line.cInfo.animationPaused);
+
+           // b.isStopped = line.cInfo.animationPaused;
+            //b.isStopped = !b.isStopped;
+            b.redrawButtonIcon(line.cInfo.animationPaused);
+
+
         }
 
         //-------------------------------------------------------------------
@@ -667,30 +676,34 @@ namespace ieditor1
             TableLine line = ((CheckBoxImageSwitch)sender).Parent as TableLine;
             string currentGroup = line.cInfo.parentName;
             int picIndex = line.cInfo.picIndex;
-            
-            var allCBoxes = GetAll(this, typeof(CheckBoxImageSwitch));
 
-            var allPlayBttns = GetAll(this, typeof(ButtonToAnimate));
+            var lines = GetAll(this, typeof(TableLinePicture));
 
-            //string name = cb.Name.Substring("cb".Length); // substring = crop "cb"
-            //TableLine line = panel2.Controls.Find("panel" + name, true).FirstOrDefault() as TableLine;
-            //int picIndex = line.cInfo.picIndex;
-            //string currentGroup = (string)cb.Tag;
 
-            foreach (CheckBoxImageSwitch c in allCBoxes)
+            foreach (TableLine l in lines)
             {
-                if (c.Tag == cb.Tag)
+                if (currentGroup == l.cInfo.parentName)
                 {
-                    c.Checked = false;
+                    l.setCheckBox(false);
+                    l.showPlayButton(false);
                 }
             }
+
             cb.Checked = true;
+            line.showPlayButton(line.cInfo.animated);
 
             PicBox pb = panel1.Controls.Find(currentGroup, true).FirstOrDefault() as PicBox;
             pb.Image = pb.images[picIndex];
+
+            // pb stop animation!
+            line.cInfo.animationPaused = true;
+            pb.PlayAnimation(picIndex, line.cInfo.animationPaused);
+
+            ButtonToAnimate b = line.Controls.Find("play", true).FirstOrDefault() as ButtonToAnimate;
+            b.redrawButtonIcon(line.cInfo.animationPaused);
         }
 
-        //---------------------------------------------------------------------------------------
+        //------------------------------------------------------------------------
 
         private void PanelClickHighlight(object sender, EventArgs e)
         {

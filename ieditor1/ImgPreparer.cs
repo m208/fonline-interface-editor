@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace FOIE
 {
@@ -30,12 +25,12 @@ namespace FOIE
             {
                 FoFrm fofrm = new FoFrm(path);
                 fps = fofrm.fps;
-               
+
                 foreach (string img in fofrm.imagePaths)
                 {
                     images.Add(LoadBitmapUnlocked(Editor.fullPath + img));
                 }
-            } 
+            }
             else
             {
                 images.Add(LoadBitmapUnlocked(path));

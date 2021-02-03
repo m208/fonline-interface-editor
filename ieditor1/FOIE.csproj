@@ -176,9 +176,14 @@
     <Content Include="Resources\icon-error.png" />
     <Content Include="Resources\icon-hatch.png" />
     <Content Include="Resources\icon-image.png" />
+    <None Include="Resources\pause_button.png" />
+    <None Include="Resources\pause.png" />
     <Content Include="Resources\percent.png" />
+    <None Include="Resources\play_button.png" />
+    <None Include="Resources\play.png" />
     <Content Include="Resources\resize.png" />
     <None Include="Resources\typography.png" />
+    <None Include="Resources\run.png" />
     <Content Include="Resources\up.png" />
   </ItemGroup>
   <ItemGroup>

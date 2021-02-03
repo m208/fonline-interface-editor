@@ -164,7 +164,6 @@ namespace FOIE
 
     public class ButtonToAnimate : Button
     {
-        public bool animationPaused = false;
         public bool displayButton = false;
 
         public ButtonToAnimate(string name)
@@ -174,10 +173,15 @@ namespace FOIE
 
             Size = new Size(20, 20);
             Location = new Point(125, 0);
-            BackgroundImage = Properties.Resources.up;
+            BackgroundImage = Properties.Resources.play;
             BackgroundImageLayout = ImageLayout.Zoom;
 
             Visible = displayButton;
+        }
+
+        public void redrawButtonIcon(bool isStopped)
+        {
+            BackgroundImage = isStopped ? Properties.Resources.play : Properties.Resources.pause;
         }
 
     }

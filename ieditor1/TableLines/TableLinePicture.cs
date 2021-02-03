@@ -1,13 +1,12 @@
 ﻿
 using FOIE.TableLines;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace FOIE
 {
     class TableLinePicture : TableLine
     {
-        
+
 
         public TableLinePicture(ControlInfo _cInfo)
         {
@@ -16,12 +15,13 @@ namespace FOIE
 
             var CheckBox = new CheckBoxImageSwitch
             {
-                Name = "cb" + cInfo.name,
-                Checked = (_cInfo.picIndex == 0),   
+                //Name = "cb" + cInfo.name,
+                Name = "cb",
+                Checked = (_cInfo.picIndex == 0),
                 Tag = cInfo.parentName,
             };
             this.Controls.Add(CheckBox);
- 
+
 
             var openBttn = new ButtonToOpen("open" + cInfo.name);
             new ToolTip().SetToolTip(openBttn, "Browse...");
@@ -29,7 +29,7 @@ namespace FOIE
 
             var playBttn = new ButtonToAnimate("play");
             new ToolTip().SetToolTip(playBttn, "Play");
-            
+
             if (cInfo.animated && cInfo.picIndex == 0)
             {
                 playBttn.Visible = true;

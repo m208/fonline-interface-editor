@@ -1,7 +1,4 @@
-﻿
-using System;
-using System.Drawing;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace FOIE.TableLines
 {
@@ -19,7 +16,7 @@ namespace FOIE.TableLines
             Button zBttn = new ButtonToZ("zBttn" + cInfo.name);
             new ToolTip().SetToolTip(zBttn, "Bring to front/ send to back");
             this.Controls.Add(zBttn);
-            
+
             this.Tag = new tableRowTag { parentName = cInfo.name };
         }
 
