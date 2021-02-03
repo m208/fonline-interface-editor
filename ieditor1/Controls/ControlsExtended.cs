@@ -18,6 +18,7 @@ namespace FOIE
             int num = 0;
             if (!animationPaused)
             {
+                if (frames[picIndex].fps == 0) frames[picIndex].fps = 10;   // 0 fps at some files???
                 t.Interval = 1000 / frames[picIndex].fps;
 
                 t.Enabled = true;
@@ -164,6 +165,7 @@ namespace FOIE
     public class ButtonToAnimate : Button
     {
         public bool animationPaused = false;
+        public bool displayButton = false;
 
         public ButtonToAnimate(string name)
 
@@ -174,6 +176,8 @@ namespace FOIE
             Location = new Point(125, 0);
             BackgroundImage = Properties.Resources.up;
             BackgroundImageLayout = ImageLayout.Zoom;
+
+            Visible = displayButton;
         }
 
     }

@@ -63,7 +63,6 @@ namespace FOIE
                 };
                 controlInfo.Add(cInfo);
 
-                //controlInfo.Add(new ControlInfo(line[i], "Picture", value, infoFieldTxt, fileExist));
             }
 
             if (bitmaps != null && bitmaps.Count > 0)

@@ -94,6 +94,17 @@ namespace FOIE.TableLines
                 BackColor = prevColor;
             }
         }
+
+        public void showPlayButton(bool show)
+        {
+            ButtonToAnimate playBttn = this.Controls.Find("play", false).FirstOrDefault() as ButtonToAnimate;
+            playBttn.Visible = show;
+            playBttn.displayButton = show;
+        }
+
+
+
+
     }
 
     //----   TAG OBJECT  ------------------------------------------------------------------------

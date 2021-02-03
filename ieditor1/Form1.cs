@@ -443,49 +443,49 @@ namespace ieditor1
             PicBox bg = panel1.Controls.Find(Editor.currentBackground, true).FirstOrDefault() as PicBox;
             foreach (PicBox pb in bg.Controls.OfType<PicBox>())
             {
-                pb.LocationChanged += (sender, e) => picBox_LocSizeChanged(pb, e);  // ok ++
-                pb.SizeChanged += (sender, e) => picBox_LocSizeChanged(pb, e);
-                pb.MouseDown += (sender, e) => picBoxClickHighlight(pb, e);
-                pb.MouseUp += (sender, e) => picBoxClickHighlightOff(pb, e);
+                pb.LocationChanged += (sender, e) => PicBox_LocSizeChanged(pb, e);  // ok ++
+                pb.SizeChanged += (sender, e) => PicBox_LocSizeChanged(pb, e);
+                pb.MouseDown += (sender, e) => PicBoxClickHighlight(pb, e);
+                pb.MouseUp += (sender, e) => PicBoxClickHighlightOff(pb, e);
             }
 
             foreach (Panel p in panel2.Controls.OfType<Panel>())
             {
                 foreach (TextBoxForValues tb in p.Controls.OfType<TextBoxForValues>())
                 {
-                    tb.TextChanged += (sender, e) => updateTxtBox(tb, e);           // ok +
+                    tb.TextChanged += (sender, e) => UpdateTxtBox(tb, e);           // ok +
                 }
                 foreach (ButtonToHide bttn in p.Controls.OfType<ButtonToHide>())
                 {
-                    bttn.Click += (sender, e) => { showHideArea(bttn, e); };        // ok ++
+                    bttn.Click += (sender, e) => { ShowHideArea(bttn, e); };        // ok ++
                 }
                 foreach (ButtonToZ bttn in p.Controls.OfType<ButtonToZ>())
                 {
-                    bttn.Click += (sender, e) => { changeZLayer(bttn, e); };        // ok ++
+                    bttn.Click += (sender, e) => { ChangeZLayer(bttn, e); };        // ok ++
                 }
                 foreach (ButtonToOpen bttn in p.Controls.OfType<ButtonToOpen>())
                 {
-                    bttn.Click += (sender, e) => { openImgFile(bttn, e); };           // ok ++
+                    bttn.Click += (sender, e) => { OpenImgFile(bttn, e); };           // ok ++
                 }
                 foreach (ButtonToAnimate bttn in p.Controls.OfType<ButtonToAnimate>())
                 {
-                    bttn.Click += (sender, e) => { animateImage(bttn, e); };           // 
+                    bttn.Click += (sender, e) => { AnimateImage(bttn, e); };           // 
                 }
                 foreach (CheckBoxImageSwitch cb in p.Controls.OfType<CheckBoxImageSwitch>())
                 {
-                    cb.Click += (sender, e) => { selectPicToShow(cb, e); };               // ok
+                    cb.Click += (sender, e) => { SelectPicToShow(cb, e); };               // ok
                 }
                 foreach (LinkLabel l in p.Controls.OfType<LinkLabel>())
                 {
-                    l.MouseDown += (sender, e) => panelClickHighlight(l, e);        // ok +
-                    l.MouseUp += (sender, e) => panelClickHighlightOff(l, e);
+                    l.MouseDown += (sender, e) => PanelClickHighlight(l, e);        // ok +
+                    l.MouseUp += (sender, e) => PanelClickHighlightOff(l, e);
                 }
             }
         }
 
 
         //      EVENT HANDLERS  ----------------------------------------------
-        private void picBox_LocSizeChanged(object sender, EventArgs e)
+        private void PicBox_LocSizeChanged(object sender, EventArgs e)
         {
             string itemName = (string)((Control)sender).Name;
             int[] coords =
@@ -507,14 +507,14 @@ namespace ieditor1
 
         //------------------------------------------------------------------------------------------------------------------
 
-        private void picBoxClickHighlight(object sender, EventArgs e)
+        private void PicBoxClickHighlight(object sender, EventArgs e)
         {
             string name = ((Control)sender).Name;
             TableLine line = panel2.Controls.Find("panel" + name, true).FirstOrDefault() as TableLine;
             line.highLiteRow(true);
 
         }
-        private void picBoxClickHighlightOff(object sender, EventArgs e)
+        private void PicBoxClickHighlightOff(object sender, EventArgs e)
         {
             string name = ((Control)sender).Name;
             TableLine line = panel2.Controls.Find("panel" + name, true).FirstOrDefault() as TableLine;
@@ -523,7 +523,7 @@ namespace ieditor1
 
         //------------------------------------------------------------------------------------------------------------------
 
-        private void updateTxtBox(object sender, EventArgs e)
+        private void UpdateTxtBox(object sender, EventArgs e)
         {
             string name = ((Control)sender).Name.Substring("tb".Length);
             string str = ((Control)sender).Text;
@@ -533,31 +533,38 @@ namespace ieditor1
 
             if (type == "Picture")
             {
-                Bitmap newImg = readImage(str);
 
                 string currentGroup = line.cInfo.parentName;
                 int picIndex = line.cInfo.picIndex;
+
                 PicBox pb = panel1.Controls.Find(currentGroup, true).FirstOrDefault() as PicBox;
 
-                if (newImg == null)
+                string path = Editor.getFullPath(str);
+                if (File.Exists(path))
                 {
-                    line.drawErrorIcon();
-                    line.updateInfo("Error!");
-                    newImg = new Bitmap(FOIE.Properties.Resources.nofile1);
+                    ImgPreparer newImg = new ImgPreparer(path);
+
+                    pb.frames.Insert(picIndex, newImg);
+                    pb.images.Insert(picIndex, newImg.images[0]);
+
+                    line.drawOkIcon();
+                    line.updateInfo(newImg.images[0].Width + "x" + newImg.images[0].Height);
+
+                    if (newImg.images.Count > 1) line.showPlayButton(true);
+                    else line.showPlayButton(false);
                 }
                 else
                 {
-                    line.drawOkIcon();
-                    line.updateInfo(newImg.Width + "x" + newImg.Height);
+                    pb.images[picIndex] = new Bitmap(FOIE.Properties.Resources.nofile1);
+                    line.drawErrorIcon();
+                    line.updateInfo("Error!");
+                    line.showPlayButton(false);
                 }
-
-                pb.images[picIndex] = newImg;
-
 
                 CheckBox cb = this.Controls.Find("cb" + name, true).FirstOrDefault() as CheckBox;
                 if (cb.Checked)
                 {
-                    pb.Image = newImg;
+                    pb.Image = pb.images[picIndex];
                 }
             }
             else if (type == "Area" || type == "AreaMain")
@@ -587,7 +594,7 @@ namespace ieditor1
 
         //------------------------------------------------------------------------------------------------------------------
 
-        private void showHideArea(object sender, EventArgs e)
+        private void ShowHideArea(object sender, EventArgs e)
         {
             ButtonToHide b = (ButtonToHide)sender;
             string name = b.Name.Substring("hide".Length); // crop "hide"
@@ -603,7 +610,7 @@ namespace ieditor1
 
         //-------------------------------------------------------------------
 
-        private void changeZLayer(object sender, EventArgs e)
+        private void ChangeZLayer(object sender, EventArgs e)
         {
             ButtonToZ b = (ButtonToZ)sender;
             string name = b.Name.Substring("zBttn".Length); // crop "zBttn"
@@ -618,11 +625,10 @@ namespace ieditor1
 
         //-------------------------------------------------------------------
 
-        private void animateImage(object sender, EventArgs e)
+        private void AnimateImage(object sender, EventArgs e)
         {
+            string name = ((Button)sender).Parent.Name.Substring("panel".Length);
             ButtonToAnimate b = (ButtonToAnimate)sender;
-            string name = b.Name.Substring("play".Length); // crop "play"
-            
             TableLine line = this.Controls.Find("panel" + name, true).FirstOrDefault() as TableLine;
             string parentName = line.cInfo.parentName;
             int picIndex = line.cInfo.picIndex;
@@ -632,12 +638,12 @@ namespace ieditor1
             p.PlayAnimation(picIndex, b.animationPaused);
             b.animationPaused = !b.animationPaused;
         }
-        
+
         //-------------------------------------------------------------------
 
-        private void openImgFile(object sender, EventArgs e)
+        private void OpenImgFile(object sender, EventArgs e)
         {
-            string newPic = getFileName("Images|*.png; *.jpg; *frm; *.fofrm", true);  
+            string newPic = getFileName("Images|*.png; *.jpg; *frm; *.fofrm", true);
             if (newPic != null)
             {
                 string picName = newPic.Substring(Editor.fullPath.Length);
@@ -652,19 +658,24 @@ namespace ieditor1
 
         //--------------------------------------------------------------------------------------------------------------
 
-        private void selectPicToShow(object sender, EventArgs e)
+        private void SelectPicToShow(object sender, EventArgs e)
         {
             CheckBoxImageSwitch cb = (Control)sender as CheckBoxImageSwitch;
             if (cb.Checked) return;
 
             // else
-
+            TableLine line = ((CheckBoxImageSwitch)sender).Parent as TableLine;
+            string currentGroup = line.cInfo.parentName;
+            int picIndex = line.cInfo.picIndex;
+            
             var allCBoxes = GetAll(this, typeof(CheckBoxImageSwitch));
 
-            string name = cb.Name.Substring("cb".Length); // substring = crop "cb"
-            TableLine line = panel2.Controls.Find("panel" + name, true).FirstOrDefault() as TableLine;
-            int picIndex = line.cInfo.picIndex;
-            string currentGroup = (string)cb.Tag;
+            var allPlayBttns = GetAll(this, typeof(ButtonToAnimate));
+
+            //string name = cb.Name.Substring("cb".Length); // substring = crop "cb"
+            //TableLine line = panel2.Controls.Find("panel" + name, true).FirstOrDefault() as TableLine;
+            //int picIndex = line.cInfo.picIndex;
+            //string currentGroup = (string)cb.Tag;
 
             foreach (CheckBoxImageSwitch c in allCBoxes)
             {
@@ -679,33 +690,9 @@ namespace ieditor1
             pb.Image = pb.images[picIndex];
         }
 
-        //-------------------------------------------------------------------
-        private void picBox_Changed(object sender, EventArgs e)
-        {
-            string itemName = (string)((Control)sender).Name;
-            int[] coords =
-             {
-                ((Control)sender).Location.X,
-                ((Control)sender).Location.Y,
-                ((Control)sender).Width + ((Control)sender).Location.X,
-                ((Control)sender).Height + ((Control)sender).Location.Y
-            };
-            string newValue = string.Join(" ", coords);
-
-            var cName = "tb" + ((Control)sender).Name;
-            TextBox tb = this.Controls.Find(cName, true).FirstOrDefault() as TextBox;
-            tb.Text = newValue;
-
-            var sName = "size" + ((Control)sender).Name;
-            TextBox stb = this.Controls.Find(sName, true).FirstOrDefault() as TextBox;
-            stb.Text = ((Control)sender).Width + "x" + ((Control)sender).Height;
-
-            Editor.iniArray[itemName] = newValue;
-        }
-
         //---------------------------------------------------------------------------------------
 
-        private void panelClickHighlight(object sender, EventArgs e)
+        private void PanelClickHighlight(object sender, EventArgs e)
         {
             string name = ((Control)sender).Name.Substring("lbl".Length);
             PictureBox p = panel1.Controls.Find(name, true).FirstOrDefault() as PictureBox;
@@ -716,7 +703,7 @@ namespace ieditor1
             zb.isOnTop = true;
         }
 
-        private void panelClickHighlightOff(object sender, EventArgs e)
+        private void PanelClickHighlightOff(object sender, EventArgs e)
         {
             string name = ((Control)sender).Name.Substring(3);
             PictureBox p = panel1.Controls.Find(name, true).FirstOrDefault() as PictureBox;
@@ -724,21 +711,6 @@ namespace ieditor1
         }
 
         //------------------------------------------------------------------------
-
-        private Bitmap readImage(string fileName)
-        {
-            string path = Editor.getFullPath(fileName);
-            if (File.Exists(path))
-            {
-                ImgPreparer image = new ImgPreparer(path);
-                return image.images[0];
-
-            }
-            else return null;
-        }
-
-        //------------------------------------------------------------------------
-
 
 
     }
